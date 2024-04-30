@@ -4,10 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:skincanvas/AppConstant/Routes.dart';
 import 'package:skincanvas/AppConstant/Static.dart';
 import 'package:skincanvas/AppConstant/Theme.dart';
@@ -77,35 +74,44 @@ class HomeFragmentHelper {
   Widget appBar() {
     // return Consumer<GeneralController>(builder: (context, generalWatch, _) {
     return AppBar(
+      toolbarHeight: 70,
       backgroundColor: theme.backGroundColor,
       elevation: 0.0,
       centerTitle: false,
       automaticallyImplyLeading: false,
-      title: Align(
-        alignment: Alignment.topLeft,
-        child: Row(children: [
-          Image.asset(
-            "assets/Icons/drawer.png",
-            scale: 3.5,
-          ),
-          SizedBox(
-            width: 10.w,
-          ),
-          Image.asset(
-            "assets/Icons/logo_home.png",
-            scale: 3,
-          ),
-          SizedBox(
-            width: 5.w,
-          ),
-          Expanded(
-            child: Image.asset(
-              "assets/Icons/scotani_name.png",
-              scale: 4.5,
-            ),
-          ),
-        ]),
+      title: Padding(
+        padding: const EdgeInsets.only(top: 15.0),
+        child: Image.asset(
+          "assets/Icons/logo_tazee.png",
+          scale: 4,
+        ),
       ),
+
+      //  Align(
+      //   alignment: Alignment.topLeft,
+      //   // child: Row(children: [
+      //   //   Image.asset(
+      //   //     "assets/Icons/drawer.png",
+      //   //     scale: 3.5,
+      //   //   ),
+      //   //   SizedBox(
+      //   //     width: 10.w,
+      //   //   ),
+      //   //   Image.asset(
+      //   //     "assets/Icons/logo_home.png",
+      //   //     scale: 3,
+      //   //   ),
+      //   //   SizedBox(
+      //   //     width: 5.w,
+      //   //   ),
+      //   //   Expanded(
+      //   //     child: Image.asset(
+      //   //       "assets/Icons/scotani_name.png",
+      //   //       scale: 4.5,
+      //   //     ),
+      //   //   ),
+      //   // ]),
+      // ),
 
       ///
       /// Action

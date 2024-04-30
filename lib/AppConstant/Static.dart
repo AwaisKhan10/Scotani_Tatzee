@@ -8,8 +8,8 @@ class Statics {
   //var baseURL = 'https://scotani-client.arhamsoft.org/v1/api';
   // var baseURL = 'https://skin-canvas.kasarhamsoft.org/v1/api';
 
-  // var baseURL = 'https://app.scotani.com/v1/api';
-  var baseURL = "http://localhost:8081/v1/api";
+  var baseURL = 'https://app.scotani.com/v1/api';
+  // var baseURL = "http://localhost:8081/v1/api";
 
   var tattooAndGraphicGenerationURL =
       'https://api.openai.com/v1/images/generations';
