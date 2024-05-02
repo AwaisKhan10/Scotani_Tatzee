@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -121,21 +120,21 @@ class MoreFragmentHelper {
                     ),
                     child: CachedNetworkImage(
                       imageUrl: generalWatch.profilePhotoValue!,
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              utils.loadingShimmer(
-                        height: static.width > 550
-                            ? static.width * .14
-                            : static.width * .2,
-                        width: static.width > 550
-                            ? static.width * .14
-                            : static.width * .2,
-                      ),
-                      errorWidget: (context, url, error) =>
-                          utils.loadingShimmer(
-                        height: static.width * .2,
-                        width: static.width * .2,
-                      ),
+                      // progressIndicatorBuilder:
+                      //     (context, url, downloadProgress) =>
+                      //         utils.loadingShimmer(
+                      //   height: static.width > 550
+                      //       ? static.width * .14
+                      //       : static.width * .2,
+                      //   width: static.width > 550
+                      //       ? static.width * .14
+                      //       : static.width * .2,
+                      // ),
+                      // errorWidget: (context, url, error) =>
+                      //     utils.loadingShimmer(
+                      //   height: static.width * .2,
+                      //   width: static.width * .2,
+                      // ),
                       fit: BoxFit.cover,
                     ),
                   ),

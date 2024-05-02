@@ -80,7 +80,7 @@ class HomeFragmentHelper {
       centerTitle: false,
       automaticallyImplyLeading: false,
       title: Padding(
-        padding: const EdgeInsets.only(top: 15.0),
+        padding: const EdgeInsets.only(top: 25.0),
         child: Image.asset(
           "assets/Icons/logo_tazee.png",
           scale: 4,
@@ -119,6 +119,8 @@ class HomeFragmentHelper {
 
       actions: [
         InkWell(onTap: () async {
+          // orderRead.cartProductListSelectionInitialize();
+          // Navigator.pushNamed(context, route.myCartScreenRoute);
           if (homeWatch.loadingApi == false) {
             await orderRead.cartListingApi(context,
                 isLoading: true, isRoute: true);
@@ -133,7 +135,7 @@ class HomeFragmentHelper {
                   color: theme.whiteColor, shape: BoxShape.circle),
               child: Image.asset(
                 "assets/Icons/cart1.png",
-                scale: 3.5,
+                scale: 2.5,
               ),
             ),
             if (orderAndWishListWatch.quantityOfCartProduct != 0)
@@ -165,40 +167,44 @@ class HomeFragmentHelper {
         SizedBox(
           width: 8.w,
         ),
-        GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
 
-            utils.flipCard(context);
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 4.w),
-            decoration: BoxDecoration(
-                color: theme.lightBlackColor,
-                shape: BoxShape.circle,
-                border: Border.all(color: theme.greyColor.withOpacity(.8))),
+              utils.flipCard(context);
+            },
             child: Container(
-              width: static.width > 500 ? 40.w : 45.w,
-              height: static.width > 500 ? 40.h : 45.h,
-              margin:
-                  static.width > 500 ? EdgeInsets.all(2.w) : EdgeInsets.all(0),
-              clipBehavior: Clip.antiAliasWithSaveLayer,
+              padding: EdgeInsets.symmetric(horizontal: 4.w),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: theme.lightGreyColor,
-              ),
-              child: CachedNetworkImage(
-                imageUrl: generalWatch.profilePhotoValue!,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    utils.loadingShimmer(
-                  width: 30.w,
-                  height: 30.h,
+                  color: theme.lightBlackColor,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: theme.greyColor.withOpacity(.8))),
+              child: Container(
+                width: static.width > 500 ? 40.w : 45.w,
+                height: static.width > 500 ? 40.h : 45.h,
+                margin: static.width > 500
+                    ? EdgeInsets.all(2.w)
+                    : EdgeInsets.all(0),
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: theme.lightGreyColor,
                 ),
-                errorWidget: (context, url, error) => utils.loadingShimmer(
-                  width: 30.w,
-                  height: 30.h,
+                child: CachedNetworkImage(
+                  imageUrl: generalWatch.profilePhotoValue!,
+                  // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  //     utils.loadingShimmer(
+                  //   width: 30.w,
+                  //   height: 30.h,
+                  // ),
+                  // errorWidget: (context, url, error) => utils.loadingShimmer(
+                  //   width: 30.w,
+                  //   height: 30.h,
+                  // ),
+                  fit: BoxFit.contain,
                 ),
-                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -546,9 +552,7 @@ class HomeFragmentHelper {
                           ? homeWatch.tattooProductList.length
                           : homeWatch.fashionProductList.length;
 
-              return homeWatch.productLoading &&
-                          homeWatch.productList.isEmpty ||
-                      homeWatch.loadingApi
+              return homeWatch.productLoading && homeWatch.productList.isEmpty
                   ? Container(
                       width: static.width,
                       padding: EdgeInsets.symmetric(
@@ -557,7 +561,7 @@ class HomeFragmentHelper {
                       child: Wrap(
                         alignment: WrapAlignment.spaceBetween,
                         children: [
-                          for (int i = 0; i < 4; i++) utils.productShimmer(),
+                          // for (int i = 0; i < 4; i++) utils.productShimmer(),
                         ],
                       ),
                     )
@@ -620,9 +624,11 @@ class HomeFragmentHelper {
                 SizedBox(
                   width: 10.w,
                 ),
-                if (homeWatch.loadingApi) ...[
-                  for (int i = 0; i < 4; i++) utils.categoriesShimmer(),
-                ] else if (homeWatch.categoryList.isNotEmpty) ...[
+                // if (homeWatch.loadingApi) ...[
+                //   // for (int i = 0; i < 4; i++) utils.categoriesShimmer(),
+                // ] else
+
+                if (homeWatch.categoryList.isNotEmpty) ...[
                   for (int i = 0; i < homeWatch.categoryList.length; i++)
                     InspirationalContainer(
                         categories: homeWatch.categoryList[i],
@@ -665,7 +671,7 @@ class HomeFragmentHelper {
   Widget buildImageCard({index, List<Products>? productDetailList}) {
     return GestureDetector(
       onTap: () {
-        //homeRead.categoryStatusUpdate(index: index);
+        // homeRead.categoryStatusUpdate(index: index);
       },
       child: Container(
         width: static.width > 500 ? static.width * .45 : static.width * .46,
@@ -705,17 +711,17 @@ class HomeFragmentHelper {
                       borderRadius: BorderRadius.circular(8.r),
                       child: CachedNetworkImage(
                         imageUrl: '${productDetailList![index].image}',
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                utils.loadingShimmer(
-                          width: static.width * .25,
-                          height: static.width * .25,
-                        ),
-                        errorWidget: (context, url, error) =>
-                            utils.loadingShimmer(
-                          width: static.width * .25,
-                          height: static.width * .25,
-                        ),
+                        // progressIndicatorBuilder:
+                        //     (context, url, downloadProgress) =>
+                        //         utils.loadingShimmer(
+                        //   width: static.width * .25,
+                        //   height: static.width * .25,
+                        // ),
+                        // errorWidget: (context, url, error) =>
+                        //     utils.loadingShimmer(
+                        //   width: static.width * .25,
+                        //   height: static.width * .25,
+                        // ),
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -853,7 +859,7 @@ class HomeFragmentHelper {
                                 //     width: static.width > 550 ? 26.w : 35.w,
                                 //   ),
                                 ),
-                          ),
+                          )
                         ],
                       ),
                     ],

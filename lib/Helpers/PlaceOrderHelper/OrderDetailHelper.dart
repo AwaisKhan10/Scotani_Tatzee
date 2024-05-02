@@ -92,17 +92,17 @@ class OrderDetailHelper {
                     ),
                     child: CachedNetworkImage(
                       imageUrl: '${orderWatch.combineImagesList[i]}',
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              utils.loadingShimmer(
-                        height: static.width * .5.w,
-                        width: static.width * .5.w,
-                      ),
-                      errorWidget: (context, url, error) =>
-                          utils.loadingShimmer(
-                        height: static.width * .5.w,
-                        width: static.width * .5.w,
-                      ),
+                      // progressIndicatorBuilder:
+                      //     (context, url, downloadProgress) =>
+                      //         utils.loadingShimmer(
+                      //   height: static.width * .5.w,
+                      //   width: static.width * .5.w,
+                      // ),
+                      // errorWidget: (context, url, error) =>
+                      //     utils.loadingShimmer(
+                      //   height: static.width * .5.w,
+                      //   width: static.width * .5.w,
+                      // ),
                       fit: BoxFit.contain,
                     ),
                   ),

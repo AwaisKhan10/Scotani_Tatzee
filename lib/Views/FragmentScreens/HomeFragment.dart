@@ -104,11 +104,11 @@ class _HomeFragmentScreenState extends State<HomeFragmentScreen>
             child: Column(
               children: [
                 SizedBox(
-                  height: 15.h,
+                  height: 10.h,
                 ),
                 helper.appBar(),
                 SizedBox(
-                  height: 10.h,
+                  height: 5.h,
                 ),
                 helper.fieldForSearch(),
                 helper.tabs(),

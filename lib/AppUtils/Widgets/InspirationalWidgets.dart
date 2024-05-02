@@ -62,27 +62,27 @@ class _InspirationalContainerState extends State<InspirationalContainer> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: theme.whiteColor),
-              child: CachedNetworkImage(
-                imageUrl: widget.categories!.image.toString(),
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    utils.loadingShimmer(
-                  height: static.width > 550
-                      ? static.width * .15
-                      : static.width * .2.w,
-                  width: static.width > 550
-                      ? static.width * .15
-                      : static.width * .2.w,
-                ),
-                errorWidget: (context, url, error) => utils.loadingShimmer(
-                  height: static.width > 550
-                      ? static.width * .15
-                      : static.width * .2.w,
-                  width: static.width > 550
-                      ? static.width * .15
-                      : static.width * .2.w,
-                ),
-                fit: BoxFit.cover,
-              ),
+              // child: CachedNetworkImage(
+              //   imageUrl: widget.categories!.image.toString(),
+              //   progressIndicatorBuilder: (context, url, downloadProgress) =>
+              //   //     utils.loadingShimmer(
+              //   //   height: static.width > 550
+              //   //       ? static.width * .15
+              //   //       : static.width * .2.w,
+              //   //   width: static.width > 550
+              //   //       ? static.width * .15
+              //   //       : static.width * .2.w,
+              //   // ),
+              //   errorWidget: (context, url, error) => utils.loadingShimmer(
+              //     height: static.width > 550
+              //         ? static.width * .15
+              //         : static.width * .2.w,
+              //     width: static.width > 550
+              //         ? static.width * .15
+              //         : static.width * .2.w,
+              //   ),
+              //   fit: BoxFit.cover,
+              // ),
             ),
             SizedBox(
               height: 4.h,

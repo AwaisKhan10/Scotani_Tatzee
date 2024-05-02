@@ -32,8 +32,9 @@ class _OrdersWidgetState extends State<OrdersWidget> {
   String status = '';
   String names = '';
 
-  var orderRead = Provider.of<OrderCheckOutWishlistController>(navigatorkey.currentContext!, listen: false);
-
+  var orderRead = Provider.of<OrderCheckOutWishlistController>(
+      navigatorkey.currentContext!,
+      listen: false);
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
     } else if (widget.orders!.orderStatus == 'Cancel') {
       orderColor = theme.redColor;
       status = "4";
-    }else if (widget.orders!.orderStatus == 'Refunded') {
+    } else if (widget.orders!.orderStatus == 'Refunded') {
       orderColor = theme.redColor;
       status = "5";
     }
@@ -124,17 +125,17 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                               child: CachedNetworkImage(
                                 imageUrl:
                                     '${widget.orders!.products![0].productImage}',
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) =>
-                                        utils.loadingShimmer(
-                                  width: 30.w,
-                                  height: 30.h,
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    utils.loadingShimmer(
-                                  width: 30.w,
-                                  height: 30.h,
-                                ),
+                                // progressIndicatorBuilder:
+                                //     (context, url, downloadProgress) =>
+                                //         utils.loadingShimmer(
+                                //   width: 30.w,
+                                //   height: 30.h,
+                                // ),
+                                // errorWidget: (context, url, error) =>
+                                //     utils.loadingShimmer(
+                                //   width: 30.w,
+                                //   height: 30.h,
+                                // ),
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -155,17 +156,17 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                   child: CachedNetworkImage(
                                     imageUrl:
                                         '${widget.orders!.products![1].productImage}',
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            utils.loadingShimmer(
-                                      width: 30.w,
-                                      height: 30.h,
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        utils.loadingShimmer(
-                                      width: 30.w,
-                                      height: 30.h,
-                                    ),
+                                    // progressIndicatorBuilder:
+                                    //     (context, url, downloadProgress) =>
+                                    //         utils.loadingShimmer(
+                                    //   width: 30.w,
+                                    //   height: 30.h,
+                                    // ),
+                                    // errorWidget: (context, url, error) =>
+                                    //     utils.loadingShimmer(
+                                    //   width: 30.w,
+                                    //   height: 30.h,
+                                    // ),
                                     fit: BoxFit.contain,
                                   ),
                                 ),
@@ -187,17 +188,17 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                   child: CachedNetworkImage(
                                     imageUrl:
                                         '${widget.orders!.products![2].productImage}',
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            utils.loadingShimmer(
-                                      width: 30.w,
-                                      height: 30.h,
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        utils.loadingShimmer(
-                                      width: 30.w,
-                                      height: 30.h,
-                                    ),
+                                    // progressIndicatorBuilder:
+                                    //     (context, url, downloadProgress) =>
+                                    //         utils.loadingShimmer(
+                                    //   width: 30.w,
+                                    //   height: 30.h,
+                                    // ),
+                                    // errorWidget: (context, url, error) =>
+                                    //     utils.loadingShimmer(
+                                    //   width: 30.w,
+                                    //   height: 30.h,
+                                    // ),
                                     fit: BoxFit.contain,
                                   ),
                                 ),
@@ -327,17 +328,17 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                 child: CachedNetworkImage(
                                   imageUrl:
                                       '${widget.orders!.products![0].productImage}',
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          utils.loadingShimmer(
-                                    width: 30.w,
-                                    height: 30.h,
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      utils.loadingShimmer(
-                                    width: 30.w,
-                                    height: 30.h,
-                                  ),
+                                  // progressIndicatorBuilder:
+                                  //     (context, url, downloadProgress) =>
+                                  //         utils.loadingShimmer(
+                                  //   width: 30.w,
+                                  //   height: 30.h,
+                                  // ),
+                                  // errorWidget: (context, url, error) =>
+                                  //     utils.loadingShimmer(
+                                  //   width: 30.w,
+                                  //   height: 30.h,
+                                  // ),
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -358,17 +359,17 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                     child: CachedNetworkImage(
                                       imageUrl:
                                           '${widget.orders!.products![1].productImage}',
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              utils.loadingShimmer(
-                                        width: 30.w,
-                                        height: 30.h,
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          utils.loadingShimmer(
-                                        width: 30.w,
-                                        height: 30.h,
-                                      ),
+                                      // progressIndicatorBuilder:
+                                      //     (context, url, downloadProgress) =>
+                                      //         utils.loadingShimmer(
+                                      //   width: 30.w,
+                                      //   height: 30.h,
+                                      // ),
+                                      // errorWidget: (context, url, error) =>
+                                      //     utils.loadingShimmer(
+                                      //   width: 30.w,
+                                      //   height: 30.h,
+                                      // ),
                                       fit: BoxFit.contain,
                                     ),
                                   ),
@@ -390,17 +391,17 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                     child: CachedNetworkImage(
                                       imageUrl:
                                           '${widget.orders!.products![2].productImage}',
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              utils.loadingShimmer(
-                                        width: 30.w,
-                                        height: 30.h,
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          utils.loadingShimmer(
-                                        width: 30.w,
-                                        height: 30.h,
-                                      ),
+                                      // progressIndicatorBuilder:
+                                      //     (context, url, downloadProgress) =>
+                                      //         utils.loadingShimmer(
+                                      //   width: 30.w,
+                                      //   height: 30.h,
+                                      // ),
+                                      // errorWidget: (context, url, error) =>
+                                      //     utils.loadingShimmer(
+                                      //   width: 30.w,
+                                      //   height: 30.h,
+                                      // ),
                                       fit: BoxFit.contain,
                                     ),
                                   ),

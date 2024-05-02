@@ -169,46 +169,49 @@ class SelectCategoryHelper {
                               .subCategories!
                               .length;
                       j++)
-                    InspirationalContainer(
-                      categories: Categories(
-                          image: homeWatch
-                              .configureDataList[
-                                  homeWatch.configurableCategoryIndex]
-                              .subCategories![j]
-                              .image,
-                          name: homeWatch
-                              .configureDataList[
-                                  homeWatch.configurableCategoryIndex]
-                              .subCategories![j]
-                              .name,
-                          sId: homeWatch
-                              .configureDataList[
-                                  homeWatch.configurableCategoryIndex]
-                              .subCategories![j]
-                              .sId),
-                      index: j,
-                      isFromConfigureable: true,
-                      onTap: () async {
-                        await homeRead.productListingApi(context,
-                            categoryID: homeWatch
-                                .configureDataList[
-                                    homeWatch.configurableCategoryIndex]
-                                .subCategories![j]
-                                .sId,
-                            title: '',
-                            type: "3",
-                            isLoading: false,
-                            isLoadingFromConfigurable: true);
-                        await homeRead.selectedCategoryForConfigurableUpdator(
+                    homeWatch.configureDataList.isNotEmpty
+                        ? InspirationalContainer(
+                            categories: Categories(
+                                image: homeWatch
+                                    .configureDataList[
+                                        homeWatch.configurableCategoryIndex]
+                                    .subCategories![j]
+                                    .image,
+                                name: homeWatch
+                                    .configureDataList[
+                                        homeWatch.configurableCategoryIndex]
+                                    .subCategories![j]
+                                    .name,
+                                sId: homeWatch
+                                    .configureDataList[
+                                        homeWatch.configurableCategoryIndex]
+                                    .subCategories![j]
+                                    .sId),
                             index: j,
-                            ID: homeWatch
-                                .configureDataList[
-                                    homeWatch.configurableCategoryIndex]
-                                .subCategories![j]
-                                .sId,
-                            type: '3');
-                      },
-                    ),
+                            isFromConfigureable: true,
+                            onTap: () async {
+                              await homeRead.productListingApi(context,
+                                  categoryID: homeWatch
+                                      .configureDataList[
+                                          homeWatch.configurableCategoryIndex]
+                                      .subCategories![j]
+                                      .sId,
+                                  title: '',
+                                  type: "3",
+                                  isLoading: false,
+                                  isLoadingFromConfigurable: true);
+                              await homeRead
+                                  .selectedCategoryForConfigurableUpdator(
+                                      index: j,
+                                      ID: homeWatch
+                                          .configureDataList[homeWatch
+                                              .configurableCategoryIndex]
+                                          .subCategories![j]
+                                          .sId,
+                                      type: '3');
+                            },
+                          )
+                        : Container(),
                 ],
               ),
             ),
@@ -217,76 +220,77 @@ class SelectCategoryHelper {
             ),
             Container(
               width: static.width,
-              child: homeWatch.productLoading &&
-                      homeWatch.configurableProductList.isEmpty
-                  ? Container(
-                      width: static.width,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                      ),
-                      child: Wrap(
-                        alignment: WrapAlignment.spaceBetween,
-                        children: [
-                          for (int i = 0; i < 4; i++) utils.productShimmer(),
-                        ],
-                      ),
-                    )
-                  : !homeWatch.productLoading &&
-                          homeWatch.configurableProductList.isEmpty
+              child:
+                  // homeWatch.productLoading &&
+                  homeWatch.configurableProductList.isEmpty
                       ? Container(
-                          alignment: Alignment.center,
-                          child: utils.noDataFound())
-                      : Container(
+                          width: static.width,
                           padding: EdgeInsets.symmetric(
-                                horizontal: 4.w,
-                              ) +
-                              EdgeInsets.only(bottom: 10.h),
-                          child: Consumer<HomeController>(
-                              builder: (context, homeWatch, _) {
-                            return Wrap(
-                              children: [
-                                for (int i = 0;
-                                    i <
-                                        homeWatch
-                                            .configurableProductList.length;
-                                    i++) ...[
-                                  buildImageCard(
-                                    index: i,
-                                    productDetailList:
-                                        homeWatch.configurableProductList,
-                                  ),
-                                ]
-                              ],
-                            );
-                            //
-                            //   StaggeredGridView.countBuilder(
-                            //   shrinkWrap: true,
-                            //   staggeredTileBuilder: (index) => StaggeredTile.count(1, 1.8),
-                            //
-                            //   mainAxisSpacing: 6.h,
-                            //   // vertical spacing between items
-                            //   crossAxisSpacing: 10.h,
-                            //   // horizontal spacing between items
-                            //   crossAxisCount: 2,
-                            //   // no. of virtual columns in grid
-                            //
-                            //   scrollDirection: Axis.vertical,
-                            //   itemCount: homeWatch.tabIndex==0? homeWatch.inspirationProductList.length:
-                            //   homeWatch.tabIndex==1 ? homeWatch.discoverProductList.length :
-                            //   homeWatch.tabIndex==2? homeWatch.tattooProductList.length:
-                            //   homeWatch.fashionProductList.length,
-                            //   itemBuilder: (context, index) => buildImageCard(
-                            //       index: index,
-                            //       productDetailList:
-                            //       homeWatch.tabIndex==0? homeWatch.inspirationProductList:
-                            //       homeWatch.tabIndex==1 ? homeWatch.discoverProductList :
-                            //       homeWatch.tabIndex==2? homeWatch.tattooProductList:
-                            //       homeWatch.fashionProductList,
-                            //   ),
-                            //
-                            // );
-                          }),
-                        ),
+                            horizontal: 4.w,
+                          ),
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            children: [
+                              // for (int i = 0; i < 4; i++) utils.productShimmer(),
+                            ],
+                          ),
+                        )
+                      : !homeWatch.productLoading &&
+                              homeWatch.configurableProductList.isEmpty
+                          ? Container(
+                              alignment: Alignment.center,
+                              child: utils.noDataFound())
+                          : Container(
+                              padding: EdgeInsets.symmetric(
+                                    horizontal: 4.w,
+                                  ) +
+                                  EdgeInsets.only(bottom: 10.h),
+                              child: Consumer<HomeController>(
+                                  builder: (context, homeWatch, _) {
+                                return Wrap(
+                                  children: [
+                                    for (int i = 0;
+                                        i <
+                                            homeWatch
+                                                .configurableProductList.length;
+                                        i++) ...[
+                                      buildImageCard(
+                                        index: i,
+                                        productDetailList:
+                                            homeWatch.configurableProductList,
+                                      ),
+                                    ]
+                                  ],
+                                );
+                                //
+                                //   StaggeredGridView.countBuilder(
+                                //   shrinkWrap: true,
+                                //   staggeredTileBuilder: (index) => StaggeredTile.count(1, 1.8),
+                                //
+                                //   mainAxisSpacing: 6.h,
+                                //   // vertical spacing between items
+                                //   crossAxisSpacing: 10.h,
+                                //   // horizontal spacing between items
+                                //   crossAxisCount: 2,
+                                //   // no. of virtual columns in grid
+                                //
+                                //   scrollDirection: Axis.vertical,
+                                //   itemCount: homeWatch.tabIndex==0? homeWatch.inspirationProductList.length:
+                                //   homeWatch.tabIndex==1 ? homeWatch.discoverProductList.length :
+                                //   homeWatch.tabIndex==2? homeWatch.tattooProductList.length:
+                                //   homeWatch.fashionProductList.length,
+                                //   itemBuilder: (context, index) => buildImageCard(
+                                //       index: index,
+                                //       productDetailList:
+                                //       homeWatch.tabIndex==0? homeWatch.inspirationProductList:
+                                //       homeWatch.tabIndex==1 ? homeWatch.discoverProductList :
+                                //       homeWatch.tabIndex==2? homeWatch.tattooProductList:
+                                //       homeWatch.fashionProductList,
+                                //   ),
+                                //
+                                // );
+                              }),
+                            ),
 
               // Expanded(
               //   child: Consumer<HomeController>(builder: (context, homeWatch, _) {
@@ -526,17 +530,17 @@ class SelectCategoryHelper {
                         borderRadius: BorderRadius.circular(8.r),
                         child: CachedNetworkImage(
                           imageUrl: '${productDetailList![index].image}',
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  utils.loadingShimmer(
-                            width: static.width * .25,
-                            height: static.width * .25,
-                          ),
-                          errorWidget: (context, url, error) =>
-                              utils.loadingShimmer(
-                            width: static.width * .25,
-                            height: static.width * .25,
-                          ),
+                          // progressIndicatorBuilder:
+                          //     (context, url, downloadProgress) =>
+                          //         utils.loadingShimmer(
+                          //   width: static.width * .25,
+                          //   height: static.width * .25,
+                          // ),
+                          // errorWidget: (context, url, error) =>
+                          //     utils.loadingShimmer(
+                          //   width: static.width * .25,
+                          //   height: static.width * .25,
+                          // ),
                           fit: BoxFit.contain,
                         ),
                       ),

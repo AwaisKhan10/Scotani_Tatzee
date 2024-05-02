@@ -20,8 +20,10 @@ class OrdersFragmentHelper {
 
   OrdersFragmentHelper(this.context, this.scrollController) {
     scrollController.addListener(() async {
-      if (scrollController.position.atEdge && scrollController.position.pixels != 0) {
-        if (orderWatch.mdOrderModal.data!.pagination!.pages!.toInt() >= orderWatch.orderPage) {
+      if (scrollController.position.atEdge &&
+          scrollController.position.pixels != 0) {
+        if (orderWatch.mdOrderModal.data!.pagination!.pages!.toInt() >=
+            orderWatch.orderPage) {
           await orderRead.orderListingApi(context,
               searching: '', isLoading: true, page: orderWatch.orderPage);
         }
@@ -90,16 +92,16 @@ class OrdersFragmentHelper {
                   ),
                   child: CachedNetworkImage(
                     imageUrl: generalWatch.profilePhotoValue!,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            utils.loadingShimmer(
-                      width: 30.w,
-                      height: 30.h,
-                    ),
-                    errorWidget: (context, url, error) => utils.loadingShimmer(
-                      width: 30.w,
-                      height: 30.h,
-                    ),
+                    // progressIndicatorBuilder:
+                    //     (context, url, downloadProgress) =>
+                    //         utils.loadingShimmer(
+                    //   width: 30.w,
+                    //   height: 30.h,
+                    // ),
+                    // errorWidget: (context, url, error) => utils.loadingShimmer(
+                    //   width: 30.w,
+                    //   height: 30.h,
+                    // ),
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -122,9 +124,11 @@ class OrdersFragmentHelper {
         controller: orderWatch.searchOrderController,
         maxLines: 1,
         postfixIcon: 'search',
-        postfixClick: () async{
+        postfixClick: () async {
           await orderRead.orderListingApi(context,
-              isLoading: true, searching: orderWatch.searchOrderController.text, page: 1);
+              isLoading: true,
+              searching: orderWatch.searchOrderController.text,
+              page: 1);
         },
         postfixIconColor: theme.greyColor,
         postFixIconSize: static.width > 550 ? 12.w : 20.w,
@@ -134,9 +138,9 @@ class OrdersFragmentHelper {
           // if (text == '') {
           //   await orderRead.orderSearchPageUpdate(value: 1);
           // }
-          if(text == '')
-          await orderRead.orderListingApi(context,
-              isLoading: true, searching: text, page: 1);
+          if (text == '')
+            await orderRead.orderListingApi(context,
+                isLoading: true, searching: text, page: 1);
         },
       ),
     );

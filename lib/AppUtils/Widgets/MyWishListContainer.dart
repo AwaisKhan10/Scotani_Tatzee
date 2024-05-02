@@ -1,5 +1,6 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skincanvas/AppConstant/Static.dart';
@@ -13,13 +14,12 @@ class MyWishListWidget extends StatefulWidget {
   String productImage;
   Function()? onTap;
 
-  MyWishListWidget({
-    required this.productName,
-    required this.productPrice,
-    required this.productAttribute,
-    required this.productImage,
-    this.onTap
-  });
+  MyWishListWidget(
+      {required this.productName,
+      required this.productPrice,
+      required this.productAttribute,
+      required this.productImage,
+      this.onTap});
 
   @override
   State<MyWishListWidget> createState() => _MyWishListWidgetState();
@@ -45,7 +45,6 @@ class _MyWishListWidgetState extends State<MyWishListWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Container(
                 width: static.width * .18,
                 height: static.width * .18,
@@ -56,15 +55,15 @@ class _MyWishListWidgetState extends State<MyWishListWidget> {
                     borderRadius: BorderRadius.circular(10.r)),
                 child: CachedNetworkImage(
                   imageUrl: widget.productImage!,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      utils.loadingShimmer(
-                        width: static.width * .12,
-                        height: static.width * .12,
-                      ),
-                  errorWidget: (context, url, error) => utils.loadingShimmer(
-                    width: static.width * .12,
-                    height: static.width * .12,
-                  ),
+                  // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  //     utils.loadingShimmer(
+                  //       width: static.width * .12,
+                  //       height: static.width * .12,
+                  //     ),
+                  // errorWidget: (context, url, error) => utils.loadingShimmer(
+                  //   width: static.width * .12,
+                  //   height: static.width * .12,
+                  // ),
                   fit: BoxFit.contain,
                 ),
               ),
@@ -113,11 +112,14 @@ class _MyWishListWidgetState extends State<MyWishListWidget> {
               SizedBox(
                 width: 25.w,
               ),
-
               GestureDetector(
                 onTap: widget.onTap,
                 child: Container(
-                  child: Icon(Icons.favorite,size: 28.sp,color: theme.orangeColor,),
+                  child: Icon(
+                    Icons.favorite,
+                    size: 28.sp,
+                    color: theme.orangeColor,
+                  ),
                 ),
               )
             ],
@@ -133,5 +135,4 @@ class _MyWishListWidgetState extends State<MyWishListWidget> {
       ),
     );
   }
-
 }

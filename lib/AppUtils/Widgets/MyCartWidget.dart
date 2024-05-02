@@ -101,15 +101,15 @@ class _MyCartWidgetState extends State<MyCartWidget> {
                     borderRadius: BorderRadius.circular(10.r)),
                 child: CachedNetworkImage(
                   imageUrl: '${widget.productImage}',
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      utils.loadingShimmer(
-                    width: static.width * .14,
-                    height: static.width * .14,
-                  ),
-                  errorWidget: (context, url, error) => utils.loadingShimmer(
-                    width: static.width * .14,
-                    height: static.width * .14,
-                  ),
+                  // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  //     utils.loadingShimmer(
+                  //   width: static.width * .14,
+                  //   height: static.width * .14,
+                  // ),
+                  // errorWidget: (context, url, error) => utils.loadingShimmer(
+                  //   width: static.width * .14,
+                  //   height: static.width * .14,
+                  // ),
                   fit: BoxFit.contain,
                 ),
               ),
@@ -167,17 +167,17 @@ class _MyCartWidgetState extends State<MyCartWidget> {
                                         child: CachedNetworkImage(
                                           imageUrl:
                                               '${widget.productGraphicAndTextList[i].image}',
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              utils.loadingShimmer(
-                                            width: 20.w,
-                                            height: 20.h,
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              utils.loadingShimmer(
-                                            width: 20.w,
-                                            height: 20.h,
-                                          ),
+                                          // progressIndicatorBuilder: (context,
+                                          //         url, downloadProgress) =>
+                                          //     utils.loadingShimmer(
+                                          //   width: 20.w,
+                                          //   height: 20.h,
+                                          // ),
+                                          // errorWidget: (context, url, error) =>
+                                          //     utils.loadingShimmer(
+                                          //   width: 20.w,
+                                          //   height: 20.h,
+                                          // ),
                                           fit: BoxFit.contain,
                                         ),
                                       ),

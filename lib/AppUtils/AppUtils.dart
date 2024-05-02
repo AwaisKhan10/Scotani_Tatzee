@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/parser.dart';
@@ -16,7 +15,6 @@ import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:skincanvas/AppConstant/Static.dart';
 import 'package:skincanvas/AppConstant/Theme.dart';
 import 'package:skincanvas/AppUtils/Widgets/ProfileWidget.dart';
@@ -61,9 +59,10 @@ class AppUtils {
       {size = 0.0, fontFamily = 'finalBook', weight = FontWeight.normal}) {
     return TextStyle(
       fontWeight: static.normal,
-      fontSize: MediaQuery.of(navigatorkey.currentContext!).size.width > 412
-          ? size
-          : size - 2.sp,
+      fontSize: 18.sp,
+      // MediaQuery.of(navigatorkey.currentContext!).size.width > 500
+      //     ? size
+      //     : size - 0.1.sp,
       color: color,
       decoration: TextDecoration.none,
       fontFamily: fontFamily,
@@ -90,6 +89,28 @@ class AppUtils {
       decoration: TextDecoration.none,
       fontFamily: fontFamily,
       height: 1.4,
+    );
+  }
+
+  extralHeadingStyleB(color, {fontFamily = 'finalBook'}) {
+    return TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 35.sp,
+      color: color,
+      decoration: TextDecoration.none,
+      fontFamily: fontFamily,
+      height: 1.4,
+    );
+  }
+
+  extralsmallHeadingStyleB(color, {fontFamily = 'finalBook'}) {
+    return TextStyle(
+      fontWeight: static.bold,
+      fontSize: 35.sp,
+      color: color,
+      decoration: TextDecoration.none,
+      fontFamily: fontFamily,
+      height: 1,
     );
   }
 
@@ -328,7 +349,7 @@ class AppUtils {
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
       margin: EdgeInsets.symmetric(vertical: 5.h),
       width: static.width,
-      color: themeColor.lightBlackColor,
+      color: themeColor.redColor,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -421,8 +442,8 @@ class AppUtils {
       child: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 2.w) +
-              EdgeInsets.only(right: 12.w),
-          margin: EdgeInsets.symmetric(vertical: 7.h),
+              EdgeInsets.only(right: 10.w),
+          margin: EdgeInsets.only(top: 7.h, bottom: 4.h),
           decoration: BoxDecoration(
               color: textfieldColor ?? themeColor.lightGreyColor,
               borderRadius: BorderRadius.circular(16.r),
@@ -520,15 +541,15 @@ class AppUtils {
                 ? CachedNetworkImage(
                     width: imageSize ?? static.width * .12,
                     imageUrl: "${image}",
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => loadingShimmer(
-                      width: static.width * .12,
-                      height: static.width * .12,
-                    ),
-                    errorWidget: (context, url, error) => loadingShimmer(
-                      width: static.width * .12,
-                      height: static.width * .12,
-                    ),
+                    // progressIndicatorBuilder:
+                    //     (context, url, downloadProgress) => loadingShimmer(
+                    //   width: static.width * .12,
+                    //   height: static.width * .12,
+                    // ),
+                    // errorWidget: (context, url, error) => loadingShimmer(
+                    //   width: static.width * .12,
+                    //   height: static.width * .12,
+                    // ),
                     fit: BoxFit.contain,
                   )
                 : Image.asset(
@@ -702,27 +723,27 @@ class AppUtils {
         toastPosition: EasyLoadingToastPosition.bottom);
   }
 
-  loadingShimmer(
-      {image = '',
-      height = 0.0,
-      width = 0.0,
-      color = Colors.white,
-      boxFit = BoxFit.contain}) {
-    return Container(
-      child: Shimmer.fromColors(
-          child: Center(
-            child: Image.asset(
-              "assets/Images/appLogo.png",
-              color: color,
-              fit: boxFit,
-              height: height,
-              width: width,
-            ),
-          ),
-          baseColor: Colors.grey[500]!,
-          highlightColor: Colors.grey[100]!),
-    );
-  }
+  // loadingShimmer(
+  //     {image = '',
+  //     height = 0.0,
+  //     width = 0.0,
+  //     color = Colors.white,
+  //     boxFit = BoxFit.contain}) {
+  //   return Container(
+  //     child: Shimmer.fromColors(
+  //         child: Center(
+  //           child: Image.asset(
+  //             "assets/Images/appLogo.png",
+  //             color: color,
+  //             fit: boxFit,
+  //             height: height,
+  //             width: width,
+  //           ),
+  //         ),
+  //         baseColor: Colors.grey[500]!,
+  //         highlightColor: Colors.grey[100]!),
+  //   );
+  // }
 
   genericDialog(context,
       {heading,
@@ -921,122 +942,122 @@ class AppUtils {
     return '';
   }
 
-  categoriesShimmer() {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 4.w),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            width: static.width > 550 ? static.width * .20 : static.width * .23,
-            height:
-                static.width > 550 ? static.width * .22 : static.width * .26,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                color: themeColor.whiteColor),
-            child: Container(
-              child: Shimmer.fromColors(
-                  child: Center(
-                    child: Image.asset(
-                      "assets/Images/appLogo.png",
-                      color: themeColor.orangeColor,
-                      fit: BoxFit.contain,
-                      width: static.width * .18,
-                      height: static.width * .18,
-                    ),
-                  ),
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!),
-            ),
-          ),
-          SizedBox(
-            height: 4.h,
-          ),
-          Shimmer.fromColors(
-              child: Text(
-                'SCOTANI',
-                style: labelStyle(
-                  themeColor.whiteColor,
-                ),
-              ),
-              baseColor: Colors.grey[700]!,
-              highlightColor: Colors.grey[100]!),
-        ],
-      ),
-    );
-  }
+  // categoriesShimmer() {
+  //   return Container(
+  //     child: Column(
+  //       children: [
+  //         Container(
+  //           margin: EdgeInsets.symmetric(horizontal: 4.w),
+  //           clipBehavior: Clip.antiAliasWithSaveLayer,
+  //           width: static.width > 550 ? static.width * .20 : static.width * .23,
+  //           height:
+  //               static.width > 550 ? static.width * .22 : static.width * .26,
+  //           decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(10.r),
+  //               color: themeColor.whiteColor),
+  //           child: Container(
+  //             child: Shimmer.fromColors(
+  //                 child: Center(
+  //                   child: Image.asset(
+  //                     "assets/Images/appLogo.png",
+  //                     color: themeColor.orangeColor,
+  //                     fit: BoxFit.contain,
+  //                     width: static.width * .18,
+  //                     height: static.width * .18,
+  //                   ),
+  //                 ),
+  //                 baseColor: Colors.grey[300]!,
+  //                 highlightColor: Colors.grey[100]!),
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           height: 4.h,
+  //         ),
+  //         Shimmer.fromColors(
+  //             child: Text(
+  //               'SCOTANI',
+  //               style: labelStyle(
+  //                 themeColor.whiteColor,
+  //               ),
+  //             ),
+  //             baseColor: Colors.grey[700]!,
+  //             highlightColor: Colors.grey[100]!),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  productShimmer() {
-    return Container(
-      width: static.width > 500 ? static.width * .45 : static.width * .46,
-      height: static.width > 500 ? static.height * .42 : static.height * .35,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.r),
-        color: themeColor.transparentColor,
-      ),
-      margin:
-          EdgeInsets.only(bottom: 10.h) + EdgeInsets.symmetric(horizontal: 5.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: themeColor.transparentColor,
-                  ),
-                  color: themeColor.whiteColor),
-              child: Shimmer.fromColors(
-                  child: Center(
-                    child: Image.asset(
-                      "assets/Images/appLogo.png",
-                      color: themeColor.orangeColor,
-                      fit: BoxFit.contain,
-                      width: static.width * .3,
-                      height: static.width * .3,
-                    ),
-                  ),
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!),
-            ),
-          ),
-          SizedBox(
-            height: 8.h,
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 10.w),
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Shimmer.fromColors(
-                    child: Text(
-                      'SCOTANI',
-                      style: smallLabelStyle(
-                        themeColor.whiteColor.withOpacity(.8),
-                      ),
-                    ),
-                    baseColor: Colors.grey[700]!,
-                    highlightColor: Colors.grey[100]!),
-                SizedBox(height: 2.h),
-                Shimmer.fromColors(
-                    child: Text(
-                      '\$0.0',
-                      style: smallLabelStyle(
-                        themeColor.orangeColor.withOpacity(.8),
-                      ),
-                    ),
-                    baseColor: Colors.grey[700]!,
-                    highlightColor: Colors.grey[100]!),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // () {
+  //   return Container(
+  //     width: static.width > 500 ? static.width * .45 : static.width * .46,
+  //     height: static.width > 500 ? static.height * .42 : static.height * .35,
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(8.r),
+  //       color: themeColor.transparentColor,
+  //     ),
+  //     margin:
+  //         EdgeInsets.only(bottom: 10.h) + EdgeInsets.symmetric(horizontal: 5.w),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: [
+  //         Expanded(
+  //           child: Container(
+  //             decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(8.r),
+  //                 border: Border.all(
+  //                   color: themeColor.transparentColor,
+  //                 ),
+  //                 color: themeColor.whiteColor),
+  //             child: Shimmer.fromColors(
+  //                 child: Center(
+  //                   child: Image.asset(
+  //                     "assets/Images/appLogo.png",
+  //                     color: themeColor.orangeColor,
+  //                     fit: BoxFit.contain,
+  //                     width: static.width * .3,
+  //                     height: static.width * .3,
+  //                   ),
+  //                 ),
+  //                 baseColor: Colors.grey[300]!,
+  //                 highlightColor: Colors.grey[100]!),
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           height: 8.h,
+  //         ),
+  //         Container(
+  //           padding: EdgeInsets.only(left: 10.w),
+  //           alignment: Alignment.centerLeft,
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Shimmer.fromColors(
+  //                   child: Text(
+  //                     'SCOTANI',
+  //                     style: smallLabelStyle(
+  //                       themeColor.whiteColor.withOpacity(.8),
+  //                     ),
+  //                   ),
+  //                   baseColor: Colors.grey[700]!,
+  //                   highlightColor: Colors.grey[100]!),
+  //               SizedBox(height: 2.h),
+  //               Shimmer.fromColors(
+  //                   child: Text(
+  //                     '\$0.0',
+  //                     style: smallLabelStyle(
+  //                       themeColor.orangeColor.withOpacity(.8),
+  //                     ),
+  //                   ),
+  //                   baseColor: Colors.grey[700]!,
+  //                   highlightColor: Colors.grey[100]!),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   noDataFound({text = 'No Data Exist !'}) {
     return Container(

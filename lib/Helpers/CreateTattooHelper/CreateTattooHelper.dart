@@ -50,7 +50,7 @@ class CreateTattooHelper {
 
   Widget designPrompt() {
     return SizedBox(
-      height: 177.h,
+      height: 110.h,
       child: Stack(
         children: [
           Container(
@@ -73,44 +73,43 @@ class CreateTattooHelper {
             ),
           ),
           Positioned.fill(
-            child: Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 22.w, right: 25.w),
-                    child: utils.inputField(
-                        textColor: theme.whiteColor,
-                        placeholderColor: theme.midGreyColor,
-                        placeholder: 'Design prompt',
-                        controller: homeWatch.designPromptController,
-                        isSecure: false,
-                        //    controller: authWatch.loginEmailController,
-                        maxLines: 1,
-                        textfieldColor: theme.transparentColor,
-                        borderColor: theme.whiteColor,
-                        onChange: (value) {
-                          if (value == '') {
-                            homeRead.updateIsShowGraphicsContainer(
-                                isBackButton: true);
-                          }
-                        }),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 22.w, right: 25.w),
-                    child: utils.inputField(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 22.w, right: 25.w),
+                  child: utils.inputField(
                       textColor: theme.blackColor,
-                      placeholderColor: theme.midGreyColor.withOpacity(.7),
-                      placeholder: 'Desire Text',
-                      controller: homeWatch.desireTextController,
+                      placeholderColor: theme.blackColor,
+                      placeholder:
+                          'Let artificial intelligence craft your eternal mark. Describe your vision, and let the AI tattoo generator bring it to life.',
+                      controller: homeWatch.designPromptController,
                       isSecure: false,
-                      // controller: authWatch.loginEmailController,
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
-              ),
+                      //    controller: authWatch.loginEmailController,
+                      maxLines: 4,
+                      textfieldColor: theme.whiteColor,
+                      borderColor: theme.whiteColor,
+                      onChange: (value) {
+                        if (value == '') {
+                          homeRead.updateIsShowGraphicsContainer(
+                              isBackButton: true);
+                        }
+                      }),
+                ),
+                // Container(
+                //   padding: EdgeInsets.only(left: 22.w, right: 25.w),
+                //   child: utils.inputField(
+                //     textColor: theme.blackColor,
+                //     placeholderColor: theme.midGreyColor.withOpacity(.7),
+                //     placeholder: 'Desire Text',
+                //     controller: homeWatch.desireTextController,
+                //     isSecure: false,
+                //     // controller: authWatch.loginEmailController,
+                //     maxLines: 1,
+                //   ),
+                // ),
+              ],
             ),
           ),
         ],
@@ -483,21 +482,21 @@ class CreateTattooHelper {
                     ? static.width * .18
                     : static.width * .22,
             imageUrl: '$image',
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                utils.loadingShimmer(
-              height:
-                  static.width > 550 ? static.width * .15 : static.width * .2.w,
-              width:
-                  static.width > 550 ? static.width * .15 : static.width * .2.w,
-            ),
-            errorWidget: (context, url, error) => utils.loadingShimmer(
-              height: static.width > 550
-                  ? static.width * .15
-                  : static.width * .18.w,
-              width: static.width > 550
-                  ? static.width * .15
-                  : static.width * .18.w,
-            ),
+            // progressIndicatorBuilder: (context, url, downloadProgress) =>
+            //     utils.loadingShimmer(
+            //   height:
+            //       static.width > 550 ? static.width * .15 : static.width * .2.w,
+            //   width:
+            //       static.width > 550 ? static.width * .15 : static.width * .2.w,
+            // ),
+            // errorWidget: (context, url, error) => utils.loadingShimmer(
+            //   height: static.width > 550
+            //       ? static.width * .15
+            //       : static.width * .18.w,
+            //   width: static.width > 550
+            //       ? static.width * .15
+            //       : static.width * .18.w,
+            // ),
             fit: BoxFit.contain,
           ),
 
@@ -532,10 +531,11 @@ class CreateTattooHelper {
           } else {
             if (homeRead.selectGraphics.contains(true) &&
                 homeWatch.isShowGraphicsContainer) {
-
-              await homeRead.sizeGroupAPi(context, isLoading: true, isFromProduct: false);
+              await homeRead.sizeGroupAPi(context,
+                  isLoading: true, isFromProduct: false);
               if (homeWatch.desireTextController.text.isNotEmpty)
-                await homeRead.sizeGroupAPi(context, isLoading: true, isDesireText: true);
+                await homeRead.sizeGroupAPi(context,
+                    isLoading: true, isDesireText: true);
 
               //.......... select Tatttoo ........//
               await homeRead.selectableTattoosAndGraphicListUpdate();

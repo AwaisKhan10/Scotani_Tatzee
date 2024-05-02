@@ -24,8 +24,10 @@ class CreateProductHelper {
   var static = Statics();
   var route = Routes();
 
-  var orderWatch = navigatorkey.currentContext!.watch<OrderCheckOutWishlistController>();
-  var orderRead = navigatorkey.currentContext!.read<OrderCheckOutWishlistController>();
+  var orderWatch =
+      navigatorkey.currentContext!.watch<OrderCheckOutWishlistController>();
+  var orderRead =
+      navigatorkey.currentContext!.read<OrderCheckOutWishlistController>();
   var homeRead = navigatorkey.currentContext!.read<HomeController>();
   var homeWatch = navigatorkey.currentContext!.watch<HomeController>();
 
@@ -73,15 +75,15 @@ class CreateProductHelper {
                           : homeWatch.selectedProduct!.attributes!.first.color![homeWatch.selectedProductColorImageIndex].image.toString()
                       : '${homeWatch.selectedProduct!.image}',*/
                 alignment: Alignment.center,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    utils.loadingShimmer(
-                  height: static.width * .5.w,
-                  width: static.width * .5.w,
-                ),
-                errorWidget: (context, url, error) => utils.loadingShimmer(
-                  height: static.width * .5.w,
-                  width: static.width * .5.w,
-                ),
+                // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                //     utils.loadingShimmer(
+                //   height: static.width * .5.w,
+                //   width: static.width * .5.w,
+                // ),
+                // errorWidget: (context, url, error) => utils.loadingShimmer(
+                //   height: static.width * .5.w,
+                //   width: static.width * .5.w,
+                // ),
                 fit: BoxFit.contain,
               ),
             ),
@@ -323,7 +325,8 @@ class CreateProductHelper {
                   ),
                   IconButton(
                     onPressed: () {
-                      homeRead.updateIsShowGraphicsContainer(isBackButton: true);
+                      homeRead.updateIsShowGraphicsContainer(
+                          isBackButton: true);
                       homeWatch.productDesirePromptController.clear();
                       homeWatch.productDesireTextController.clear();
                     },
@@ -400,23 +403,29 @@ class CreateProductHelper {
         ),
         child: Center(
           child: CachedNetworkImage(
-            width: isSelect ? static.width > 500 ? static.width * .20 : static.width * .24 : static.width > 500 ? static.width * .18 : static.width * .22,
+            width: isSelect
+                ? static.width > 500
+                    ? static.width * .20
+                    : static.width * .24
+                : static.width > 500
+                    ? static.width * .18
+                    : static.width * .22,
             imageUrl: '$image',
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                utils.loadingShimmer(
-              height:
-                  static.width > 550 ? static.width * .15 : static.width * .2.w,
-              width:
-                  static.width > 550 ? static.width * .15 : static.width * .2.w,
-            ),
-            errorWidget: (context, url, error) => utils.loadingShimmer(
-              height: static.width > 550
-                  ? static.width * .15
-                  : static.width * .18.w,
-              width: static.width > 550
-                  ? static.width * .15
-                  : static.width * .18.w,
-            ),
+            // progressIndicatorBuilder: (context, url, downloadProgress) =>
+            //     utils.loadingShimmer(
+            //   height:
+            //       static.width > 550 ? static.width * .15 : static.width * .2.w,
+            //   width:
+            //       static.width > 550 ? static.width * .15 : static.width * .2.w,
+            // ),
+            // errorWidget: (context, url, error) => utils.loadingShimmer(
+            //   height: static.width > 550
+            //       ? static.width * .15
+            //       : static.width * .18.w,
+            //   width: static.width > 550
+            //       ? static.width * .15
+            //       : static.width * .18.w,
+            // ),
             fit: BoxFit.contain,
           ),
 
@@ -450,10 +459,11 @@ class CreateProductHelper {
                 message: 'Please add your graphic prompt field');
           } else {
             if (homeRead.selectGraphics.contains(true)) {
-
-              await homeRead.sizeGroupAPi(context, isLoading: true, isFromProduct: true);
+              await homeRead.sizeGroupAPi(context,
+                  isLoading: true, isFromProduct: true);
               if (homeWatch.productDesireTextController.text.isNotEmpty)
-                await homeRead.sizeGroupAPi(context, isLoading: true, isDesireText: true);
+                await homeRead.sizeGroupAPi(context,
+                    isLoading: true, isDesireText: true);
 
               await homeRead.selectableTattoosAndGraphicListUpdate();
 
@@ -463,8 +473,7 @@ class CreateProductHelper {
               await homeRead.isImageOrTextUpdation(value: true);
               homeRead.routingForEditScreenFromTattoo(value: false);
               homeRead.updateIsFromTattoo(value: false);
-              await homeRead.updateBaseColorIniatlize(
-                  Color(0xffffffff));
+              await homeRead.updateBaseColorIniatlize(Color(0xffffffff));
 
               Navigator.pushNamed(
                   context, route.editTattooAndProductScreenRoute);

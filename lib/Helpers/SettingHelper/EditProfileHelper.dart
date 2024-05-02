@@ -93,21 +93,25 @@ class EditProfileHelper {
                 imageUrl: generalWatch.isEditProfileImage
                     ? generalWatch.selectedImageByString.toString()
                     : generalWatch.profilePhotoValue!,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    utils.loadingShimmer(
-                  width: 100.w,
-                  height: 100.h,
-                ),
-                errorWidget: (context, url, error) => utils.loadingShimmer(
-                  width: 100.w,
-                  height: 100.h,
-                ),
+                // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                //     utils.loadingShimmer(
+                //   width: 100.w,
+                //   height: 100.h,
+                // ),
+                // errorWidget: (context, url, error) => utils.loadingShimmer(
+                //   width: 100.w,
+                //   height: 100.h,
+                // ),
                 fit: BoxFit.contain,
               ),
             )),
         Positioned(
-            bottom:MediaQuery.of(navigatorkey.currentContext!).size.width > 550 ? 10.h : 20.h,
-            right:MediaQuery.of(navigatorkey.currentContext!).size.width > 550 ? 8.w : 0.h,
+            bottom: MediaQuery.of(navigatorkey.currentContext!).size.width > 550
+                ? 10.h
+                : 20.h,
+            right: MediaQuery.of(navigatorkey.currentContext!).size.width > 550
+                ? 8.w
+                : 0.h,
             child: GestureDetector(
               onTap: () {
                 utils.imageSelectionDialogBox(
@@ -207,45 +211,43 @@ class EditProfileHelper {
                 icon: 'alertAnime',
                 heading: 'Alert',
                 message:
-                "Enable location access for precise delivery tracking and to ensure timely order arrivals.",
+                    "Enable location access for precise delivery tracking and to ensure timely order arrivals.",
                 positiveButton: 'ALLOW',
                 negativeButton: 'CANCEL', positiveAction: () async {
-                  if (await AppUtils().requestLocationPermission(context)) {
-                    LocationResult result =
+              if (await AppUtils().requestLocationPermission(context)) {
+                LocationResult result =
                     await Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => PlacePicker(
-                          mapKey,
-                        )));
-                    if (result != null) {
-                      Navigator.pop(context);
-                    }
-                    generalWatch.editAddressController.text =
-                        result.formattedAddress.toString();
-                  } else {
-                    Navigator.pop(context);
-                    openAppSettings();
-                  }
-                }, negativeAction: () {
+                              mapKey,
+                            )));
+                if (result != null) {
                   Navigator.pop(context);
-                });
+                }
+                generalWatch.editAddressController.text =
+                    result.formattedAddress.toString();
+              } else {
+                Navigator.pop(context);
+                openAppSettings();
+              }
+            }, negativeAction: () {
+              Navigator.pop(context);
+            });
           } else {
             LocationResult result =
-            await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PlacePicker(
-                  mapKey,
-                )));
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => PlacePicker(
+                          mapKey,
+                        )));
 
             generalWatch.editAddressController.text =
                 result.formattedAddress.toString();
           }
-        }
-        else {
+        } else {
           LocationResult result =
-          await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  PlacePicker(
-                    mapKey,
-                  )));
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PlacePicker(
+                        mapKey,
+                      )));
           generalWatch.editAddressController.text =
               result.formattedAddress.toString();
         }
