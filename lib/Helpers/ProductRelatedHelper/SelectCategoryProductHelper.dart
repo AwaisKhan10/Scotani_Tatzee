@@ -18,8 +18,9 @@ import 'package:skincanvas/main.dart';
 class SelectCategoryHelper {
   BuildContext context;
   ScrollController scrollController;
-
-  SelectCategoryHelper(this.context, this.scrollController) {
+  TabController tabController;
+  SelectCategoryHelper(
+      this.context, this.scrollController, this.tabController) {
     bool isLoading = false;
 
     scrollController.addListener(() async {

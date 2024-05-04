@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:skincanvas/AppConstant/Routes.dart';
 import 'package:skincanvas/AppConstant/Static.dart';
@@ -57,6 +58,56 @@ class FAQHelper {
     );
   }
 
+  Widget fieldForSearchWeb() {
+    return Container(
+      padding: EdgeInsets.only(
+        left: 15,
+        right: 15,
+        bottom: 12,
+        top: 12,
+      ),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 0),
+        child: CustomSearchTextFieldWeb(
+          controller: generalWatch.faqController,
+          hintText: 'Search using key words',
+          onChanged: (v) async {
+            if (v == '')
+              await generalRead.getFaqApi(
+                context,
+                isLoading: true,
+                searchKey: v,
+              );
+          },
+          searchFunction: () async {
+            await generalRead.getFaqApi(context,
+                isLoading: true, searchKey: generalWatch.faqController.text);
+          },
+        ),
+      ),
+      // utils.inputField(
+      //   textColor: theme.blackColor,
+      //   placeholderColor: theme.blackColor,
+      //   placeholder: 'Search using key words',
+      //   isSecure: false,
+      //   controller: generalWatch.faqController,
+      //   maxLines: 1,
+      //   postfixIcon: 'search',
+      //   postfixClick: () async {
+      //     await generalRead.getFaqApi(context,
+      //         isLoading: true, searchKey: generalWatch.faqController.text);
+      //   },
+      //   postfixIconColor: theme.greyColor,
+      //   postFixIconSize: static.width > 550 ? 12.w : 20.w,
+      //   onChange: (text) async {
+      //     if (text == '')
+      //       await generalRead.getFaqApi(context,
+      //           isLoading: true, searchKey: text);
+      //   },
+      // ),
+    );
+  }
+
   Widget faqStatements() {
     return Column(
       children: [
@@ -95,5 +146,53 @@ class FAQHelper {
         ]
       ],
     );
+  }
+
+  Widget faqStatementsWeb() {
+    return Consumer<GeneralController>(builder: (context, pro, __) {
+      return Column(
+        children: [
+          for (int i = 0; i < pro.faqList.length; i++) ...[
+            pro.faqController.text.isNotEmpty
+                ? SizedBox()
+                : Container(
+                    alignment: Alignment.centerLeft,
+                    margin: EdgeInsets.only(
+                      bottom: 8,
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'Scotani Features and Usage',
+                      style: GoogleFonts.poppins(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: theme.lightGreyColor,
+                      ),
+                    ),
+                  ),
+            Container(
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    for (int j = 0; j < pro.faqList[i].faqs!.length; j++)
+                      FAQExpandableListViewWeb(
+                        title: "${pro.faqList[i].faqs![j].title}",
+                        description: "${pro.faqList[i].faqs![j].desc}",
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+          ]
+        ],
+      );
+    });
   }
 }

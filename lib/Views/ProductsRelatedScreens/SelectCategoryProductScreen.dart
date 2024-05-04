@@ -20,6 +20,7 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
   var themeColor = ThemeColors();
   var utils = AppUtils();
   var static = Statics();
+  late TabController _tabController;
 
   var homeRead = navigatorkey.currentContext!.read<HomeController>();
   var homeWatch = navigatorkey.currentContext!.watch<HomeController>();
@@ -46,7 +47,7 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     SelectCategoryHelper helper =
-        SelectCategoryHelper(context, scrollController);
+        SelectCategoryHelper(context, scrollController, _tabController);
 
     return
         // RefreshIndicator(

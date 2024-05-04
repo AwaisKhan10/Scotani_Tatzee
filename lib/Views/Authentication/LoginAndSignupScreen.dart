@@ -32,10 +32,10 @@ class LoginAndSignUpScreen extends StatelessWidget {
         child: Scaffold(
             backgroundColor: Colors.black,
             body: InternetConnectivityScreen(
-              widget: SingleChildScrollView(
-                child: Container(
-                  width: static.width,
-                  height: static.height,
+              widget: Container(
+                width: static.width,
+                height: static.height,
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
                       SizedBox(
@@ -54,34 +54,34 @@ class LoginAndSignUpScreen extends StatelessWidget {
                       helper.images(),
                     ],
                   ),
-                  // child: Stack(
-                  //   children: [
-                  // helper.backGroundImage(),
-                  // helper.image(),
-                  //     // Positioned(
-                  //     //   top: static.height * .345,
-                  //     //   left: 0,
-                  //     //   right: 0,
-                  //     //   child: helper.circularTriangle(),
-                  //     // ),
-                  //     // Positioned(
-                  //     //   top: static.height * .55,
-                  //     //   left: 0,
-                  //     //   right: 0,
-                  //     //   child: helper.headingText(),
-                  //     // ),
-                  //     // Positioned(
-                  //     //   bottom: 30.h,
-                  //     //   child: Column(
-                  //     //     children: [
-                  // helper.loginButton(),
-                  // helper.createAnAccountButton(),
-                  //     //     ],
-                  //     //   ),
-                  //     // ),
-                  //   ],
-                  // )
                 ),
+                // child: Stack(
+                //   children: [
+                // helper.backGroundImage(),
+                // helper.image(),
+                //     // Positioned(
+                //     //   top: static.height * .345,
+                //     //   left: 0,
+                //     //   right: 0,
+                //     //   child: helper.circularTriangle(),
+                //     // ),
+                //     // Positioned(
+                //     //   top: static.height * .55,
+                //     //   left: 0,
+                //     //   right: 0,
+                //     //   child: helper.headingText(),
+                //     // ),
+                //     // Positioned(
+                //     //   bottom: 30.h,
+                //     //   child: Column(
+                //     //     children: [
+                // helper.loginButton(),
+                // helper.createAnAccountButton(),
+                //     //     ],
+                //     //   ),
+                //     // ),
+                //   ],
+                // )
               ),
             )),
       ),

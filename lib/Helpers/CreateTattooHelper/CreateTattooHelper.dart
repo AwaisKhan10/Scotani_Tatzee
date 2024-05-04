@@ -49,71 +49,84 @@ class CreateTattooHelper {
   }
 
   Widget designPrompt() {
-    return SizedBox(
-      height: 110.h,
-      child: Stack(
-        children: [
-          Container(
-            height: 177.h,
-            width: static.width,
-            decoration: BoxDecoration(
-              color: theme.lightBlackColor,
-            ),
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(left: 20.w, top: 20),
+          child: Text(
+            'Enter Your Prompt',
+            style: utils.xxlHeadingStyle(theme.whiteColor,
+                fontFamily: 'finalBold'),
+            textAlign: TextAlign.start,
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: EdgeInsets.only(top: 26.h),
-              child: Image.asset(
-                'assets/Images/triangle.png',
-                height: static.width * .60,
-                width: static.width * .60,
-                fit: BoxFit.contain,
+        ),
+
+        Positioned.fill(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 22.w, right: 25.w),
+                child: utils.inputField(
+                    textColor: theme.blackColor,
+                    placeholderColor: theme.blackColor,
+                    placeholder:
+                        'Let artificial intelligence craft your eternal mark. Describe your vision, and let the AI tattoo generator bring it to life.',
+                    controller: homeWatch.designPromptController,
+                    isSecure: false,
+                    //    controller: authWatch.loginEmailController,
+                    maxLines: 4,
+                    textfieldColor: theme.whiteColor,
+                    borderColor: theme.whiteColor,
+                    onChange: (value) {
+                      if (value == '') {
+                        homeRead.updateIsShowGraphicsContainer(
+                            isBackButton: true);
+                      }
+                    }),
               ),
-            ),
+              // Container(
+              //   padding: EdgeInsets.only(left: 22.w, right: 25.w),
+              //   child: utils.inputField(
+              //     textColor: theme.blackColor,
+              //     placeholderColor: theme.midGreyColor.withOpacity(.7),
+              //     placeholder: 'Desire Text',
+              //     controller: homeWatch.desireTextController,
+              //     isSecure: false,
+              //     // controller: authWatch.loginEmailController,
+              //     maxLines: 1,
+              //   ),
+              // ),
+            ],
           ),
-          Positioned.fill(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 22.w, right: 25.w),
-                  child: utils.inputField(
-                      textColor: theme.blackColor,
-                      placeholderColor: theme.blackColor,
-                      placeholder:
-                          'Let artificial intelligence craft your eternal mark. Describe your vision, and let the AI tattoo generator bring it to life.',
-                      controller: homeWatch.designPromptController,
-                      isSecure: false,
-                      //    controller: authWatch.loginEmailController,
-                      maxLines: 4,
-                      textfieldColor: theme.whiteColor,
-                      borderColor: theme.whiteColor,
-                      onChange: (value) {
-                        if (value == '') {
-                          homeRead.updateIsShowGraphicsContainer(
-                              isBackButton: true);
-                        }
-                      }),
-                ),
-                // Container(
-                //   padding: EdgeInsets.only(left: 22.w, right: 25.w),
-                //   child: utils.inputField(
-                //     textColor: theme.blackColor,
-                //     placeholderColor: theme.midGreyColor.withOpacity(.7),
-                //     placeholder: 'Desire Text',
-                //     controller: homeWatch.desireTextController,
-                //     isSecure: false,
-                //     // controller: authWatch.loginEmailController,
-                //     maxLines: 1,
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+        // Stack(
+        //   children: [
+        //     // Container(
+        //     //   height: 177.h,
+        //     //   width: static.width,
+        //     //   decoration: BoxDecoration(
+        //     //     color: theme.lightBlackColor,
+        //     //   ),
+        //     // ),
+        //     // Align(
+        //     //   alignment: Alignment.bottomRight,
+        //     //   child: Padding(
+        //     //     padding: EdgeInsets.only(top: 26.h),
+        //     //     child: Image.asset(
+        //     //       'assets/Images/triangle.png',
+        //     //       height: static.width * .60,
+        //     //       width: static.width * .60,
+        //     //       fit: BoxFit.contain,
+        //     //     ),
+        //     //   ),
+        //     // ),
+
+        //   ],
+        // ),
+      ],
     );
   }
 

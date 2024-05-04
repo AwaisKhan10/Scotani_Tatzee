@@ -85,6 +85,11 @@ class GeneralController with ChangeNotifier {
     notifyListeners();
   }
 
+  //......................... Create Design .......................//
+  TextEditingController designController = TextEditingController();
+  TextEditingController patternController = TextEditingController();
+  TextEditingController colorsController = TextEditingController();
+
   //.................... Restrict User From Navigating while Api Call ....................//
 
   bool restrictUserNavigation = false;

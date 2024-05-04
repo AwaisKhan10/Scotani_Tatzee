@@ -6,15 +6,19 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:skincanvas/AppConstant/Static.dart';
 import 'package:skincanvas/AppConstant/Theme.dart';
 import 'package:skincanvas/AppUtils/Widgets/ProfileWidget.dart';
@@ -26,6 +30,7 @@ import 'package:url_launcher/url_launcher.dart';
 class AppUtils {
   var static = Statics();
   var themeColor = ThemeColors();
+  static String selectedImage = '';
 
   var onlyDate = DateFormat("yyyy-MM-dd"); // 2020-04-03
   var date = DateFormat.yMd(); // 7/10/2020
@@ -59,10 +64,9 @@ class AppUtils {
       {size = 0.0, fontFamily = 'finalBook', weight = FontWeight.normal}) {
     return TextStyle(
       fontWeight: static.normal,
-      fontSize: 18.sp,
-      // MediaQuery.of(navigatorkey.currentContext!).size.width > 500
-      //     ? size
-      //     : size - 0.1.sp,
+      fontSize: MediaQuery.of(navigatorkey.currentContext!).size.width > 412
+          ? size
+          : size - 2.sp,
       color: color,
       decoration: TextDecoration.none,
       fontFamily: fontFamily,
@@ -92,28 +96,6 @@ class AppUtils {
     );
   }
 
-  extralHeadingStyleB(color, {fontFamily = 'finalBook'}) {
-    return TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 35.sp,
-      color: color,
-      decoration: TextDecoration.none,
-      fontFamily: fontFamily,
-      height: 1.4,
-    );
-  }
-
-  extralsmallHeadingStyleB(color, {fontFamily = 'finalBook'}) {
-    return TextStyle(
-      fontWeight: static.bold,
-      fontSize: 35.sp,
-      color: color,
-      decoration: TextDecoration.none,
-      fontFamily: fontFamily,
-      height: 1,
-    );
-  }
-
   xlHeadingStyle(color, {fontFamily = 'finalBook'}) {
     return TextStyle(
       fontWeight: static.normal,
@@ -136,10 +118,10 @@ class AppUtils {
     );
   }
 
-  xHeadingStyle(color, {fontFamily = 'finalBook'}) {
+  xHeadingStyle(color, {fontFamily = 'finalBook', double? fontSize}) {
     return TextStyle(
       fontWeight: static.light,
-      fontSize: static.xHeading,
+      fontSize: fontSize ?? static.xHeading,
       color: color,
       decoration: TextDecoration.none,
       fontFamily: fontFamily,
@@ -158,7 +140,7 @@ class AppUtils {
     );
   }
 
-  headingStyle(color,
+  TextStyle headingStyle(color,
       {fontFamily = 'finalBook', textDecoration = TextDecoration.none}) {
     return TextStyle(
       fontWeight: static.normal,
@@ -172,10 +154,12 @@ class AppUtils {
   }
 
   headingStyleB(color,
-      {fontFamily = 'finalBook', textDecoration = TextDecoration.none}) {
+      {fontFamily = 'finalBook',
+      textDecoration = TextDecoration.none,
+      double? fontSize}) {
     return TextStyle(
       fontWeight: static.bold,
-      fontSize: static.heading,
+      fontSize: fontSize ?? static.heading,
       color: color,
       decoration: textDecoration,
       fontFamily: fontFamily,
@@ -183,13 +167,12 @@ class AppUtils {
     );
   }
 
-  labelStyle(
-    color, {
-    fontFamily = 'finalBook',
-    textDecoration = TextDecoration.none,
-  }) {
+  labelStyle(color,
+      {fontFamily = 'finalBook',
+      textDecoration = TextDecoration.none,
+      double? fontSize}) {
     return TextStyle(
-      fontSize: static.label,
+      fontSize: fontSize ?? static.label,
       fontWeight: static.normal,
       color: color,
       decoration: textDecoration,
@@ -213,6 +196,28 @@ class AppUtils {
     );
   }
 
+  extralHeadingStyleB(color, {fontFamily = 'finalBook'}) {
+    return TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 35.sp,
+      color: color,
+      decoration: TextDecoration.none,
+      fontFamily: fontFamily,
+      height: 1.4,
+    );
+  }
+
+  extralsmallHeadingStyleB(color, {fontFamily = 'finalBook'}) {
+    return TextStyle(
+      fontWeight: static.bold,
+      fontSize: 35.sp,
+      color: color,
+      decoration: TextDecoration.none,
+      fontFamily: fontFamily,
+      height: 1,
+    );
+  }
+
   labelStyleB(color,
       {fontFamily = 'finalBook', textDecoration = TextDecoration.none}) {
     return TextStyle(
@@ -226,15 +231,14 @@ class AppUtils {
     );
   }
 
-  smallLabelStyle(
-    color, {
-    fontFamily = 'finalBook',
-    textDecoration = TextDecoration.none,
-    height = 1.4,
-    letterSpacing = 0.0,
-  }) {
+  smallLabelStyle(color,
+      {fontFamily = 'finalBook',
+      textDecoration = TextDecoration.none,
+      height = 1.4,
+      letterSpacing = 0.0,
+      double? fontSize}) {
     return TextStyle(
-      fontSize: static.smallLabel,
+      fontSize: fontSize ?? static.smallLabel,
       fontWeight: static.normal,
       color: color,
       decoration: textDecoration,
@@ -266,9 +270,18 @@ class AppUtils {
     );
   }
 
-  xSmallLabelStyleB(color, {fontFamily = 'finalBook'}) {
+  textStyle6({color, fontSize, fontWeight}) {
     return TextStyle(
-      fontSize: static.xSmallLabel,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      fontFamily: 'fontFamily',
+    );
+  }
+
+  xSmallLabelStyleB(color, {fontFamily = 'finalBook', double? fontSize}) {
+    return TextStyle(
+      fontSize: fontSize ?? static.xSmallLabel,
       fontWeight: static.bold,
       color: color,
       decoration: TextDecoration.none,
@@ -349,7 +362,7 @@ class AppUtils {
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
       margin: EdgeInsets.symmetric(vertical: 5.h),
       width: static.width,
-      color: themeColor.redColor,
+      color: themeColor.lightBlackColor,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -416,41 +429,42 @@ class AppUtils {
     );
   }
 
-  inputField({
-    isEnable = true,
-    textColor,
-    placeholder,
-    placeholderColor,
-    postfixIcon,
-    postfixIconColor,
-    postFixIconSize = 20.0,
-    postfixClick,
-    prefixIcon,
-    prefixIconColor,
-    preFixIconSize = 20.0,
-    prefixClick,
-    maxLines = 1,
-    isSecure,
-    controller,
-    keyboard = TextInputType.text,
-    textfieldColor = null,
-    borderColor = null,
-    onChange = null,
-  }) {
+  inputField(
+      {isEnable = true,
+      textColor,
+      placeholder,
+      placeholderColor,
+      postfixIcon,
+      postfixIconColor,
+      postFixIconSize = 20.0,
+      postfixClick,
+      prefixIcon,
+      prefixIconColor,
+      preFixIconSize = 20.0,
+      prefixClick,
+      maxLines = 1,
+      isSecure,
+      controller,
+      keyboard = TextInputType.text,
+      textfieldColor = null,
+      borderColor = null,
+      onChange = null,
+      borderWidth}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 0),
       child: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 2.w) +
-              EdgeInsets.only(right: 10.w),
-          margin: EdgeInsets.only(top: 7.h, bottom: 4.h),
+              EdgeInsets.only(right: 12.w),
+          margin: EdgeInsets.symmetric(vertical: 7.h),
           decoration: BoxDecoration(
-              color: textfieldColor ?? themeColor.lightGreyColor,
-              borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(
-                color: borderColor ?? Colors.transparent,
-                width: 0.5,
-              )),
+            color: textfieldColor ?? themeColor.lightGreyColor,
+            borderRadius: BorderRadius.circular(16.r),
+            border: Border.all(
+              color: borderColor ?? Colors.transparent,
+              width: borderWidth ?? 0.5,
+            ),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -541,16 +555,16 @@ class AppUtils {
                 ? CachedNetworkImage(
                     width: imageSize ?? static.width * .12,
                     imageUrl: "${image}",
-                    // progressIndicatorBuilder:
-                    //     (context, url, downloadProgress) => loadingShimmer(
-                    //   width: static.width * .12,
-                    //   height: static.width * .12,
-                    // ),
-                    // errorWidget: (context, url, error) => loadingShimmer(
-                    //   width: static.width * .12,
-                    //   height: static.width * .12,
-                    // ),
-                    fit: BoxFit.contain,
+                    //   progressIndicatorBuilder:
+                    //       (context, url, downloadProgress) => loadingShimmer(
+                    //     width: static.width * .12,
+                    //     height: static.width * .12,
+                    //   ),
+                    //   errorWidget: (context, url, error) => loadingShimmer(
+                    //     width: static.width * .12,
+                    //     height: static.width * .12,
+                    //   ),
+                    //   fit: BoxFit.contain,
                   )
                 : Image.asset(
                     '$image',
@@ -576,6 +590,32 @@ class AppUtils {
           ],
         ),
       ),
+    );
+  }
+
+  categorySelectiontab({
+    length,
+    isNetwork = true,
+    isFromCreateProduct = false,
+    image,
+    text,
+    textSize,
+    isSelect,
+    height,
+    width,
+    imageSize,
+    imageColor,
+    onTap,
+  }) {
+    print("length of list is $length");
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(text,
+          style: TextStyle(
+              color: isSelect
+                  ? themeColor.orangeColor
+                  : themeColor.whiteColor.withOpacity(.7),
+              fontSize: 25)),
     );
   }
 
@@ -665,6 +705,58 @@ class AppUtils {
             ));
   }
 
+  imageSelectionDialogBoxWeb(BuildContext buildContext,
+      {onTapCamera, onTapGallery}) {
+    showDialog(
+        context: buildContext,
+        builder: (context) => AlertDialog(
+              backgroundColor: themeColor.orangeColor,
+              contentPadding: EdgeInsets.zero,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              content: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  width: 500,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: themeColor.orangeColor,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: onTapCamera,
+                              child: Container(
+                                child: containerForDialogBoxWeb(
+                                    "assets/Icons/cameraFilled.png", "Camera"),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: onTapGallery,
+                              child: Container(
+                                child: containerForDialogBoxWeb(
+                                    "assets/Icons/galleryFilled.png",
+                                    "Gallery"),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  )),
+            ));
+  }
+
   containerForDialogBox(pic, text) {
     return Column(
       children: [
@@ -703,6 +795,43 @@ class AppUtils {
     );
   }
 
+  containerForDialogBoxWeb(pic, text) {
+    return Column(
+      children: [
+        Center(
+            child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          decoration: BoxDecoration(
+            color: themeColor.whiteColor,
+            shape: BoxShape.circle,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Image.asset(
+              pic,
+              fit: BoxFit.contain,
+              color: themeColor.orangeColor,
+            ),
+          ),
+        )),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          text,
+          style: headingStyleB(
+            themeColor.whiteColor,
+            fontSize: 17,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
   //........... Loading Shimmer and Toast.........//
 
   showToast(context, {message}) {
@@ -732,16 +861,12 @@ class AppUtils {
   //   return Container(
   //     child: Shimmer.fromColors(
   //         child: Center(
-  //           child: Image.asset(
-  //             "assets/Images/appLogo.png",
-  //             color: color,
-  //             fit: boxFit,
-  //             height: height,
-  //             width: width,
+  //           child: Container(
+  //             color: Colors.transparent,
   //           ),
   //         ),
-  //         baseColor: Colors.grey[500]!,
-  //         highlightColor: Colors.grey[100]!),
+  //         baseColor: Colors.transparent!,
+  //         highlightColor: Colors.transparent!),
   //   );
   // }
 
@@ -923,6 +1048,143 @@ class AppUtils {
     );
   }
 
+  exitingAppDialogWeb(context,
+      {icon,
+      heading,
+      headingTextColor,
+      message,
+      positiveButton,
+      negativeButton,
+      positiveAction,
+      negativeAction,
+      dialogColor}) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        contentPadding: EdgeInsets.zero, // Remove default padding
+        content: SingleChildScrollView(
+            child: Container(
+          width: 461,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(26), color: dialogColor),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Lottie.asset("assets/JSON/$icon.json",
+                          height: 50, width: 50, alignment: Alignment.center),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      heading,
+                      style: TextStyle(
+                        fontWeight: static.bold,
+                        fontSize: 16,
+                        color: headingTextColor,
+                        decoration: TextDecoration.none,
+                        fontFamily: 'finalBook',
+                        height: 1.4,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      message,
+                      style: TextStyle(
+                        fontWeight: static.bold,
+                        fontSize: 16,
+                        color: headingTextColor,
+                        decoration: TextDecoration.none,
+                        fontFamily: 'finalBook',
+                        height: 1.4,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                width: static.width,
+                height: 1,
+                color: headingTextColor.withOpacity(0.3),
+              ),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                          onTap: negativeAction,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                            alignment: Alignment.center,
+                            child: Text(
+                              negativeButton,
+                              style: TextStyle(
+                                fontWeight: static.bold,
+                                fontSize: 17,
+                                color: headingTextColor,
+                                decoration: TextDecoration.none,
+                                fontFamily: 'finalBook',
+                                height: 1.4,
+                              ),
+                            ),
+                          )),
+                    ),
+                    if (positiveAction != null)
+                      Container(
+                        width: 1,
+                        color: headingTextColor.withOpacity(0.3),
+                      ),
+                    if (positiveAction != null)
+                      Expanded(
+                        child: InkWell(
+                          onTap: positiveAction,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                            alignment: Alignment.center,
+                            child: Text(
+                              positiveButton,
+                              style: TextStyle(
+                                fontWeight: static.bold,
+                                fontSize: 17,
+                                color: headingTextColor,
+                                decoration: TextDecoration.none,
+                                fontFamily: 'finalBook',
+                                height: 1.4,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        )),
+      ),
+    );
+  }
+
   Future<bool> requestLocationPermission(BuildContext context) async {
     var status = await Permission.location.request();
     if (status == PermissionStatus.granted) {
@@ -958,16 +1220,12 @@ class AppUtils {
   //           child: Container(
   //             child: Shimmer.fromColors(
   //                 child: Center(
-  //                   child: Image.asset(
-  //                     "assets/Images/appLogo.png",
-  //                     color: themeColor.orangeColor,
-  //                     fit: BoxFit.contain,
-  //                     width: static.width * .18,
-  //                     height: static.width * .18,
+  //                   child: Container(
+  //                     color: Colors.transparent,
   //                   ),
   //                 ),
-  //                 baseColor: Colors.grey[300]!,
-  //                 highlightColor: Colors.grey[100]!),
+  //                 baseColor: Colors.transparent!,
+  //         highlightColor: Colors.transparent!),
   //           ),
   //         ),
   //         SizedBox(
@@ -987,7 +1245,7 @@ class AppUtils {
   //   );
   // }
 
-  // () {
+  // productShimmer() {
   //   return Container(
   //     width: static.width > 500 ? static.width * .45 : static.width * .46,
   //     height: static.width > 500 ? static.height * .42 : static.height * .35,
@@ -1072,6 +1330,30 @@ class AppUtils {
             '$text',
             style:
                 xHeadingStyleB(themeColor.whiteColor, fontFamily: 'finalBold'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  noDataFoundWeb({text = 'No Data Exist !'}) {
+    return Container(
+      padding: EdgeInsets.only(top: 50),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Lottie.asset("assets/JSON/noodedLottie.json",
+              height: 80, width: 80, alignment: Alignment.center),
+          Text(
+            '$text',
+            style: TextStyle(
+              color: themeColor.whiteColor,
+              fontFamily: 'finalBold',
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+              height: 1,
+            ),
           ),
         ],
       ),
@@ -1274,6 +1556,18 @@ class AppUtils {
     );
   }
 
+  aboutUsIconsInfoWeb({image, onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Image.asset(
+        "assets/Icons/$image.png",
+        fit: BoxFit.cover,
+        height: 32,
+        width: 32,
+      ),
+    );
+  }
+
   //......................... For Url Launch Function ....................... ///
   Future<void> openUrl(String url) async {
     if (url.contains('@')) {
@@ -1383,5 +1677,156 @@ class AppUtils {
     print('Local: $localDateTime');
 
     return formattedDate.toString();
+  }
+}
+
+class CustomTextFieldWeb extends StatefulWidget {
+  CustomTextFieldWeb(
+      {super.key,
+      required this.controller,
+      required this.hintText,
+      this.showSuffixIcon = true,
+      this.width,
+      this.height,
+      this.maxLines,
+      this.isBlackFieldColor = true});
+
+  final TextEditingController controller;
+  final String hintText;
+  final bool? showSuffixIcon;
+  final double? width;
+  final double? height;
+  final int? maxLines;
+  final bool? isBlackFieldColor;
+  @override
+  State<CustomTextFieldWeb> createState() => _CustomTextFieldWebState();
+}
+
+class _CustomTextFieldWebState extends State<CustomTextFieldWeb> {
+  bool isShow = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: widget.height ?? 62,
+      width: widget.width ?? 340,
+      child: TextFormField(
+        controller: widget.controller,
+        obscureText: isShow,
+        maxLines: widget.maxLines ?? 1,
+        cursorColor: Colors.orange,
+        style: TextStyle(
+          color: widget.isBlackFieldColor! ? Colors.white : Colors.black,
+          fontSize: 16,
+          letterSpacing: 1.5,
+          fontWeight: FontWeight.w500,
+        ),
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          contentPadding: EdgeInsets.all(12),
+          suffixIcon: widget.showSuffixIcon == true
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isShow = !isShow;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 7.0),
+                    child: Image.asset(
+                      "assets/Icons/${(isShow == false) ? 'eye' : 'eyeSlash'}.png",
+                      height: 15,
+                      width: 15,
+                      color: widget.isBlackFieldColor!
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                )
+              : null,
+          hintStyle: TextStyle(
+            color: widget.isBlackFieldColor! ? Colors.white : Colors.black,
+            fontSize: 16,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.w500,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+          fillColor: widget.isBlackFieldColor! ? Colors.black : Colors.white,
+          filled: true,
+        ),
+      ),
+    );
+  }
+}
+
+class CustomSearchTextFieldWeb extends StatefulWidget {
+  CustomSearchTextFieldWeb(
+      {super.key,
+      required this.controller,
+      required this.hintText,
+      required this.onChanged,
+      required this.searchFunction});
+
+  final TextEditingController controller;
+  final String hintText;
+  final Function(String) onChanged;
+  final Function() searchFunction;
+  @override
+  State<CustomSearchTextFieldWeb> createState() =>
+      _CustomSearchTextFieldWebState();
+}
+
+class _CustomSearchTextFieldWebState extends State<CustomSearchTextFieldWeb> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 62,
+      width: double.infinity,
+      child: TextFormField(
+        controller: widget.controller,
+        onChanged: (v) {
+          widget.onChanged(v);
+        },
+        cursorColor: Colors.orange,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          letterSpacing: 1.5,
+          fontWeight: FontWeight.w500,
+        ),
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          contentPadding: EdgeInsets.all(12),
+          suffixIcon: GestureDetector(
+            onTap: () {
+              widget.searchFunction();
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 7.0),
+              child: Icon(
+                Icons.search,
+                size: 34,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          hintStyle: GoogleFonts.poppins(
+            color: Colors.black,
+            fontSize: 16,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.w400,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+      ),
+    );
   }
 }

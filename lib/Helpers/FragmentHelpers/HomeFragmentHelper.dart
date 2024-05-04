@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:skincanvas/AppConstant/Routes.dart';
 import 'package:skincanvas/AppConstant/Static.dart';
@@ -17,6 +18,7 @@ import 'package:skincanvas/Controllers/OrdersAndCheckOutAndWishlistProvider.dart
 import 'package:skincanvas/Models/MDCartModal.dart';
 import 'package:skincanvas/Models/MDProductModal.dart';
 import 'package:skincanvas/main.dart';
+import 'package:skincanvas/web_screen/widgets/inspiration_container_web.dart';
 
 class HomeFragmentHelper {
   BuildContext context;
@@ -693,6 +695,7 @@ class HomeFragmentHelper {
                       productID: productDetailList[index].sId);
                 },
                 child: Container(
+                  width: 200,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.r),
                       // border: Border.all(
@@ -704,8 +707,8 @@ class HomeFragmentHelper {
                       // ),
                       color: theme.backGroundColor),
                   child: FractionallySizedBox(
-                    widthFactor: 1.0,
-                    heightFactor: 1.0,
+                    // widthFactor: 1.0,
+                    // heightFactor: 1.0,
                     child: ClipRRect(
                       // Wrap the image with ClipRRect
                       borderRadius: BorderRadius.circular(8.r),
@@ -722,7 +725,7 @@ class HomeFragmentHelper {
                         //   width: static.width * .25,
                         //   height: static.width * .25,
                         // ),
-                        fit: BoxFit.contain,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -813,7 +816,8 @@ class HomeFragmentHelper {
                           GestureDetector(
                             onTap: () {
                               // orderRead.cartProductListSelectionInitialize();
-                              // Navigator.pushNamed(context, route.myCartScreenRoute);
+                              // Navigator.pushNamed(
+                              //     context, route.myCartScreenRoute);
 
                               if (productDetailList[index].isProductIntoCart!) {
                                 utils.showToast(context,
@@ -859,7 +863,418 @@ class HomeFragmentHelper {
                                 //     width: static.width > 550 ? 26.w : 35.w,
                                 //   ),
                                 ),
-                          )
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///
+  ///  ******************* Web Screens Data  **************************
+  ///
+  tabBarWeb({tabController}) {
+    return // Wrap TabBar with Container for left alignment
+        Padding(
+      padding: const EdgeInsets.only(left: 30.0),
+      child: TabBar(
+        isScrollable: true,
+        // Set to true for left alignment
+        controller: tabController,
+        tabAlignment: TabAlignment.start,
+        tabs: [
+          Tab(
+            text: 'Inspiration',
+          ),
+          Tab(text: 'Shirts'),
+          Tab(text: 'Discover'),
+        ],
+        labelColor: Colors.red,
+        // Text color for active tab
+        unselectedLabelColor: Colors.white,
+
+        // Text color for inactive tabs
+        // indicatorColor: Colors.transparent, // Color of the indicator
+        indicator: BoxDecoration(color: Colors.transparent),
+        // dividerHeight: null,
+        dividerColor: Colors.transparent,
+        labelStyle: GoogleFonts.poppins(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  ///
+  /// tab view
+  ///
+  tabViewWeb({tabController}) {
+    return // Add a TabBarView
+        Expanded(
+      child: Consumer<HomeController>(builder: (context, homeWatch, _) {
+        return TabBarView(
+          physics: homeWatch.loadingApi
+              ? NeverScrollableScrollPhysics()
+              : AlwaysScrollableScrollPhysics(),
+          controller: tabController,
+          children: [
+            gridViewContainerDiscover(),
+            gridViewContainerDiscover(),
+            gridViewContainerDiscover(),
+          ],
+        );
+      }),
+    );
+  }
+
+  gridViewContainerDiscover() {
+    return Container(
+      // height: static.height,
+      child: SingleChildScrollView(
+        controller: scrollController,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 40.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              selectCategoryWidgetsWeb(),
+              SizedBox(
+                height: 20,
+              ),
+              Consumer<HomeController>(
+                builder: (context, homeWatch, _) {
+                  int lengthOfList = homeWatch.tabIndex == 0
+                      ? homeWatch.inspirationProductList.length
+                      : homeWatch.tabIndex == 1
+                          ? homeWatch.discoverProductList.length
+                          : homeWatch.tabIndex == 2
+                              ? homeWatch.tattooProductList.length
+                              : homeWatch.fashionProductList.length;
+
+                  return homeWatch.productLoading &&
+                              homeWatch.productList.isEmpty ||
+                          homeWatch.loadingApi
+                      ? Container(
+                          width: static.width,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
+                          ),
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            children: [
+                              // for (int i = 0; i < 4; i++) utils.productShimmer(),
+                            ],
+                          ),
+                        )
+                      : !homeWatch.productLoading &&
+                              (homeWatch.tabIndex == 0
+                                  ? homeWatch.inspirationProductList.isEmpty
+                                  : homeWatch.tabIndex == 1
+                                      ? homeWatch.discoverProductList.isEmpty
+                                      : homeWatch.tabIndex == 2
+                                          ? homeWatch.tattooProductList.isEmpty
+                                          : homeWatch
+                                              .fashionProductList.isEmpty)
+                          ? Container(
+                              alignment: Alignment.center,
+                              child: utils.noDataFoundWeb(),
+                            )
+                          : Consumer<HomeController>(
+                              builder: (context, homeWatch, _) {
+                                return Wrap(
+                                  runSpacing: 20,
+                                  children: [
+                                    for (int i = 0; i < lengthOfList; i++) ...[
+                                      buildImageCardWeb(
+                                        index: i,
+                                        productDetailList: homeWatch.tabIndex ==
+                                                0
+                                            ? homeWatch.inspirationProductList
+                                            : homeWatch.tabIndex == 1
+                                                ? homeWatch.discoverProductList
+                                                : homeWatch.tabIndex == 2
+                                                    ? homeWatch
+                                                        .tattooProductList
+                                                    : homeWatch
+                                                        .fashionProductList,
+                                      ),
+                                    ]
+                                  ],
+                                );
+                              },
+                            );
+                },
+              ),
+              SizedBox(
+                height: 40,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget selectCategoryWidgetsWeb({type = 0}) {
+    return Consumer<HomeController>(builder: (context, homeWatch, _) {
+      return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            // controller: scrollController,
+            child: Wrap(
+              alignment: WrapAlignment.start,
+              children: [
+                // if (homeWatch.loadingApi) ...[
+                //   for (int i = 0; i < 4; i++) utils.categoriesShimmer(),
+                // ]
+                // else
+                if (homeWatch.categoryList.isNotEmpty) ...[
+                  for (int i = 0; i < homeWatch.categoryList.length; i++)
+                    InspirationalContainerWeb(
+                        categories: homeWatch.categoryList[i],
+                        index: i,
+                        onTap: () {
+                          print("homeWatch.tabIndex ${homeWatch.tabIndex}");
+                          homeRead.selectedCategoryUpdator(
+                              index: i,
+                              ID: homeWatch.categoryList[i].sId.toString(),
+                              type: homeWatch.tabIndex == 0
+                                  ? "0"
+                                  : homeWatch.tabIndex == 1
+                                      ? "1"
+                                      : homeWatch.tabIndex == 2
+                                          ? "2"
+                                          : "4");
+
+                          homeRead.productListingApi(context,
+                              categoryID: homeWatch.categoryList[i].sId,
+                              title: '',
+                              isLoading: false,
+                              type: homeWatch.tabIndex == 0
+                                  ? "0"
+                                  : homeWatch.tabIndex == 1
+                                      ? "1"
+                                      : homeWatch.tabIndex == 2
+                                          ? "2"
+                                          : "4");
+                        }),
+                ],
+              ],
+            ),
+          ));
+    });
+  }
+
+  Widget buildImageCardWeb({index, List<Products>? productDetailList}) {
+    return GestureDetector(
+      onTap: () {
+        //homeRead.categoryStatusUpdate(index: index);
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width * .18,
+        height: MediaQuery.of(context).size.height * .42,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: theme.transparentColor,
+        ),
+        margin: EdgeInsets.only(
+          right: 18,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  homeRead.productDetailApi(context,
+                      productID: productDetailList[index].sId);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.r),
+                      // border: Border.all(
+                      //   color:
+                      //       // homeWatch.categoryStatus[index]
+                      //       //     ?
+                      //       theme.whiteColor,
+                      //   // : theme.whiteColor,
+                      // ),
+                      color: theme.backGroundColor),
+                  child: ClipRRect(
+                    // Wrap the image with ClipRRect
+                    borderRadius: BorderRadius.circular(16),
+                    child: CachedNetworkImage(
+                      imageUrl: '${productDetailList![index].image}',
+                      // progressIndicatorBuilder:
+                      //     (context, url, downloadProgress) =>
+                      //         utils.loadingShimmer(
+                      //   width: static.width * .25,
+                      //   height: static.width * .25,
+                      // ),
+                      // errorWidget: (context, url, error) =>
+                      //     utils.loadingShimmer(
+                      //   width: static.width * .25,
+                      //   height: static.width * .25,
+                      // ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ////
+                  /// Product name
+                  ///
+                  Text(
+                    '${productDetailList[index].title.toString()}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      fontSize: 19,
+                      color: theme.blackColor,
+                      fontWeight: FontWeight.bold,
+                      height: 1.2,
+                    ),
+                  ),
+                  SizedBox(height: 9),
+
+                  ///
+                  /// Price
+                  ///
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${priceKey}${productDetailList[index].price!}',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.kanit(
+                          fontSize: 19,
+                          color: theme.redColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      ///
+                      /// Heart and Cart
+                      ///
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              // print( homeWatch.productList[index].sId.toString());
+                              orderRead.makeAndRemoveWishListApi(context,
+                                  productID: homeWatch.productList[index].sId
+                                      .toString(),
+                                  status: !homeWatch
+                                      .productList[index].isFeatured!);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 35,
+                              width: 35,
+                              decoration: BoxDecoration(
+                                color: homeWatch.productList[index].isFeatured!
+                                    ? theme.blueColor.withOpacity(0.5)
+                                    : theme.blueColor,
+                                borderRadius: BorderRadius.circular(
+                                  8.0,
+                                ),
+                              ),
+                              child: Icon(
+                                size: 25,
+                                // homeWatch.productList[index].isFeatured!
+                                //     ? CupertinoIcons.heart_fill
+                                // :
+                                CupertinoIcons.heart_fill,
+                                color: homeWatch.productList[index].isFeatured!
+                                    ? theme.whiteColor.withOpacity(0.5)
+                                    : theme.whiteColor,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+
+                          ///
+                          /// Cart
+                          ///
+                          GestureDetector(
+                            onTap: () {
+                              // orderRead.cartProductListSelectionInitialize();
+                              // Navigator.pushNamed(context, route.myCartScreenRoute);
+
+                              if (productDetailList[index].isProductIntoCart!) {
+                                utils.showToast(context,
+                                    message: "Product already into cart");
+                              } else {
+                                orderRead.addToCartApi(
+                                  context,
+                                  type: 0,
+                                  systemProduct: SystemProductsSender(
+                                      productId: productDetailList[index].sId,
+                                      quantity: 1,
+                                      price: productDetailList[index].price!,
+                                      subTotal:
+                                          1 * productDetailList[index].price!),
+                                );
+                              }
+                            },
+                            child: Container(
+                                alignment: Alignment.center,
+                                height: 35,
+                                width: 35,
+                                decoration: BoxDecoration(
+                                  color: productDetailList[index]
+                                          .isProductIntoCart!
+                                      ? theme.redColor.withOpacity(.5)
+                                      : theme.redColor,
+                                  borderRadius: BorderRadius.circular(
+                                    8,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.shopping_cart,
+                                  size: 25,
+                                  color: productDetailList[index]
+                                          .isProductIntoCart!
+                                      ? theme.whiteColor.withOpacity(0.7)
+                                      : theme.whiteColor,
+                                )
+                                // ? Image.asset(
+                                //     'assets/Icons/cartFilled.png',
+                                //     height: static.width > 550 ? 20.w : 26.w,
+                                //     width: static.width > 550 ? 20.w : 26.w,
+                                //   )
+                                // : Image.asset(
+                                //     'assets/Icons/cart.png',
+                                //     height: static.width > 550 ? 26.w : 35.w,
+                                //     width: static.width > 550 ? 26.w : 35.w,
+                                //   ),
+                                ),
+                          ),
                         ],
                       ),
                     ],

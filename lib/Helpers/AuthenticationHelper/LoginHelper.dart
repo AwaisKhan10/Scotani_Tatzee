@@ -31,7 +31,7 @@ class LoginHelper {
 //
   Widget loginText() {
     return Container(
-      // padding: EdgeInsets.only(top: 30.h),
+      padding: EdgeInsets.only(top: 30.h),
       width: static.width,
       child: Column(
         children: [
@@ -163,7 +163,96 @@ class LoginHelper {
     );
   }
 
+  Widget RememberMeWeb() {
+    return GestureDetector(
+      onTap: () {
+        authRead.rememberMeUpdator(
+            value: !authWatch.isRemember,
+            email: authWatch.loginEmailController.text,
+            password: authWatch.loginPasswordController.text);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 10,
+        ),
+        child: Row(
+          children: [
+            authWatch.isRemember
+                ? Image.asset(
+                    'assets/Icons/checked.png',
+                    height: 14,
+                    width: 14,
+                    color: theme.redColor,
+                  )
+                : Image.asset(
+                    'assets/Icons/unChecked.png',
+                    height: 14,
+                    width: 14,
+                    color: theme.whiteColor.withOpacity(.6),
+                  ),
+            SizedBox(
+              width: 10.w,
+            ),
+            Text(
+              'Remember me',
+              style: utils.labelStyle(
+                theme.whiteColor,
+                fontFamily: 'finalBook',
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget loginButton() {
+    return Hero(
+      tag: 'LoginToSignupButton',
+      child: Material(
+        type: MaterialType.transparency,
+        child: Container(
+          width: static.width,
+          padding: EdgeInsets.symmetric(
+            horizontal:
+                MediaQuery.of(navigatorkey.currentContext!).size.width > 550
+                    ? 12.w
+                    : 15.w,
+            vertical: 18.h,
+          ),
+          child: utils.button(
+            textSize: static.width > 550 ? 10.sp : 20.sp,
+            text: 'Login',
+            buttonColor: theme.redColor,
+            borderColor: theme.redColor,
+            fontFamily: 'finalBold',
+            ontap: () async {
+              if (authWatch.loginEmailController.text.isEmpty) {
+                utils.showToast(context, message: 'Please fill email field');
+              } else if (!regexEmail
+                  .hasMatch(authWatch.loginEmailController.text)) {
+                utils.showToast(context, message: 'Please enter valid email');
+              } else if (authWatch.loginPasswordController.text.isEmpty) {
+                utils.showToast(context, message: 'Please fill password field');
+              } else {
+                await authRead.rememberMeUpdator(
+                    value: authWatch.isRemember,
+                    email: authWatch.loginEmailController.text,
+                    password: authWatch.loginPasswordController.text);
+                await authRead.signInApi(context);
+              }
+            },
+            textColor: theme.whiteColor,
+            width: static.width,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget loginButtonWeb() {
     return Hero(
       tag: 'LoginToSignupButton',
       child: Material(

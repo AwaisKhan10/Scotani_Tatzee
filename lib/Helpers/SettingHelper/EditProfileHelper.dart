@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -68,6 +70,42 @@ class EditProfileHelper {
     );
   }
 
+  Widget editProfileTextWeb(Function onPressed) {
+    return Container(
+      width: double.infinity,
+      color: theme.redColor,
+      height: 69,
+      child: Row(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: IconButton(
+              icon: Icon(CupertinoIcons.back),
+              color: theme.whiteColor,
+              onPressed: () {
+                onPressed();
+              }, // Callback function when pressed
+              tooltip: 'Like', // Optional tooltip text
+            ),
+          ),
+          SizedBox(
+            width: 15,
+          ),
+          Text(
+            'Edit Profile',
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w500,
+              fontSize: 26,
+              color: theme.whiteColor,
+              decoration: TextDecoration.none,
+              height: 1.4,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   cameraWidget() {
     return Stack(
       children: [
@@ -92,7 +130,7 @@ class EditProfileHelper {
                   CachedNetworkImage(
                 imageUrl: generalWatch.isEditProfileImage
                     ? generalWatch.selectedImageByString.toString()
-                    : generalWatch.profilePhotoValue!,
+                    : generalWatch.profilePhotoValue ?? '',
                 // progressIndicatorBuilder: (context, url, downloadProgress) =>
                 //     utils.loadingShimmer(
                 //   width: 100.w,
@@ -141,6 +179,81 @@ class EditProfileHelper {
                 width: static.width > 500 ? 22.w : 26.w,
               ),
             )),
+      ],
+    );
+  }
+
+  cameraWidgetWeb() {
+    return Stack(
+      children: [
+        Container(
+            padding: EdgeInsets.symmetric(horizontal: 3),
+            decoration: BoxDecoration(
+                color: theme.backGroundColor,
+                shape: BoxShape.circle,
+                border: Border.all(color: theme.orangeColor)),
+            child: Container(
+              width: 140,
+              height: 140,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: theme.lightGreyColor,
+              ),
+              child: /*generalWatch.selectedImageByString !=null ?
+            Image.file( File('${generalWatch.selectedImageByString}'), fit: BoxFit.cover):  */
+
+                  ///data/user/0/com.arhamsoft.skincanvas/cache/image_cropper_1690978076625.jpg
+                  CachedNetworkImage(
+                imageUrl: generalWatch.isEditProfileImage
+                    ? generalWatch.selectedImageByString.toString()
+                    : generalWatch.profilePhotoValue ?? '',
+                // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                //     utils.loadingShimmer(
+                //   width: 100.w,
+                //   height: 100.h,
+                // ),
+                // errorWidget: (context, url, error) => utils.loadingShimmer(
+                //   width: 100.w,
+                //   height: 100.h,
+                // ),
+                fit: BoxFit.contain,
+              ),
+            )),
+        Positioned(
+          bottom: 13,
+          right: 5,
+          child: GestureDetector(
+            onTap: () {
+              ///todo: fix this problem later
+              utils.imageSelectionDialogBoxWeb(
+                context,
+                onTapCamera: () async {
+                  Navigator.pop(context);
+                  await selectImage(
+                    ImageSource.camera,
+                    isWeb: true,
+                  );
+                  EasyLoading.dismiss();
+                },
+                onTapGallery: () async {
+                  //
+                  Navigator.pop(context);
+                  await selectImage(
+                    ImageSource.gallery,
+                    isWeb: true,
+                  );
+                  EasyLoading.dismiss();
+                },
+              );
+            },
+            child: Image.asset(
+              'assets/Icons/addImage.png',
+              height: 26,
+              width: 26,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -273,6 +386,81 @@ class EditProfileHelper {
     );
   }
 
+  Widget fieldForAddressWeb() {
+    return GestureDetector(
+      onTap: () async {
+        var status = await Permission.location.status;
+        if (Platform.isAndroid) {
+          if (status == PermissionStatus.denied ||
+              status == PermissionStatus.permanentlyDenied) {
+            AppUtils().exitingAppDialogWeb(context,
+                headingTextColor: theme.blackColor,
+                dialogColor: theme.whiteColor,
+                icon: 'alertAnime',
+                heading: 'Alert',
+                message:
+                    "Enable location access for precise delivery tracking and to ensure timely order arrivals.",
+                positiveButton: 'ALLOW',
+                negativeButton: 'CANCEL', positiveAction: () async {
+              if (await AppUtils().requestLocationPermission(context)) {
+                LocationResult result =
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PlacePicker(
+                              mapKey,
+                            )));
+                if (result != null) {
+                  Navigator.pop(context);
+                }
+                generalWatch.editAddressController.text =
+                    result.formattedAddress.toString();
+              } else {
+                Navigator.pop(context);
+                openAppSettings();
+              }
+            }, negativeAction: () {
+              Navigator.pop(context);
+            });
+          } else {
+            LocationResult result =
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => PlacePicker(
+                          mapKey,
+                        )));
+
+            generalWatch.editAddressController.text =
+                result.formattedAddress.toString();
+          }
+        } else {
+          LocationResult result =
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PlacePicker(
+                        mapKey,
+                      )));
+          generalWatch.editAddressController.text =
+              result.formattedAddress.toString();
+        }
+        //
+        // read.userLatLongUpdate(lat:result.latLng.latitude ,long:result.latLng.longitude );
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 15.w, right: 15.w),
+        child: utils.inputField(
+          isEnable: false,
+          textColor: theme.blackColor,
+          postfixIcon: null,
+          postfixClick: () async {},
+          postfixIconColor: theme.blackColor,
+          postFixIconSize: 16.h,
+          placeholderColor: theme.midGreyColor.withOpacity(.7),
+          placeholder: 'Address',
+          isSecure: false,
+          controller: generalWatch.editAddressController,
+          maxLines: 1,
+        ),
+      ),
+    );
+  }
+
   Widget updateButton() {
     return Container(
       width: static.width,
@@ -323,15 +511,84 @@ class EditProfileHelper {
     );
   }
 
-  Future selectImage(ImageSource sourceImage) async {
+  Widget updateButtonWeb() {
+    return Container(
+      width: 360,
+      alignment: Alignment.bottomCenter,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
+      margin: EdgeInsets.only(top: 30),
+      child: InkWell(
+        onTap: () async {
+          if (generalWatch.editNameController.text.isEmpty) {
+            utils.showToast(context, message: 'Enter your full name');
+          } else if (!regexName
+              .hasMatch(generalWatch.editNameController.text)) {
+            utils.showToast(context,
+                message: generalWatch.editNameController.text.length < 3 ||
+                        generalWatch.editNameController.text.length > 35
+                    ? 'Full name must be 3 to 35 characters long'
+                    : 'Please enter valid name');
+          } else if (generalWatch.editEmailController.text.isEmpty) {
+            utils.showToast(context, message: 'Enter email address');
+          } else if (!regexEmail
+              .hasMatch(generalWatch.editEmailController.text)) {
+            utils.showToast(context, message: 'Enter valid email');
+          } else if (generalWatch.editMobileController.text.isEmpty) {
+            utils.showToast(context,
+                message: 'Enter phone no with country code');
+          }
+          // else if (!regexPhone
+          //     .hasMatch(generalWatch.editNameController.text)) {
+          //   utils.showToast(context,
+          //       message: 'Please Enter a valid Phone Number');
+          // }
+          // else if (generalWatch.editAddressController.text.isEmpty) {
+          //   utils.showToast(context, message: 'Enter your permanent address');
+          // }
+          else {
+            await generalRead.fetchingUserStaticData();
+            generalRead.editProfileApi(context,
+                image: generalWatch.profilePhotoValue);
+          }
+        },
+        child: Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(vertical: 12),
+          margin: EdgeInsets.symmetric(horizontal: 3),
+          decoration: BoxDecoration(
+            color: theme.orangeColor,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: theme.orangeColor, width: .7),
+          ),
+          child: Text(
+            'Update',
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'finalBook',
+              fontWeight: FontWeight.w500,
+              color: theme.whiteColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future selectImage(ImageSource sourceImage, {bool isWeb = false}) async {
     selectedImage = await ImagePicker().pickImage(source: sourceImage);
     if (selectedImage != null) {
       generalRead.updateRestrictUserNavigation(value: true);
       EasyLoading.show(status: 'Image Uploading');
-      croppedFile = (await ImageCropper().cropImage(
-        sourcePath: selectedImage!.path,
-        aspectRatio: CropAspectRatio(ratioX: 620, ratioY: 620),
-      ));
+      if (isWeb == false) {
+        croppedFile = (await ImageCropper().cropImage(
+          sourcePath: selectedImage!.path,
+          aspectRatio: CropAspectRatio(
+            ratioX: 620,
+            ratioY: 620,
+          ),
+        ));
+      }
 
       EasyLoading.dismiss();
 
@@ -347,6 +604,17 @@ class EditProfileHelper {
 
         generalRead.updateRestrictUserNavigation();
       }
+    } else if (isWeb) {
+      print("The cropped path is:" + selectedImage!.path);
+      selectedFile = File(selectedImage!.path);
+
+      print("There the image 1:" + selectedImage!.path.toString());
+      print("There the image 1:" + File(selectedImage!.path).toString());
+
+      await generalRead.uploadImageApi(context,
+          file: File(selectedImage!.path), isSignup: false);
+
+      generalRead.updateRestrictUserNavigation();
     } else {
       print('No image selected.');
     }

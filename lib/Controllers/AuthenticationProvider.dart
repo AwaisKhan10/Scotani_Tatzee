@@ -15,6 +15,8 @@ import 'package:skincanvas/Models/MDErrorModal.dart';
 import 'package:skincanvas/Models/MDUserModal.dart';
 import 'package:skincanvas/Services/AuthenticationServices.dart';
 import 'package:skincanvas/main.dart';
+import 'package:skincanvas/web_screen/screens/layout/started_screen.dart';
+import 'package:skincanvas/web_screen/screens/web/home_screen/web_home_screen.dart';
 
 import 'OrdersAndCheckOutAndWishlistProvider.dart';
 
@@ -564,7 +566,7 @@ class AuthenticationController with ChangeNotifier {
     }
   }
 
-  deleteAccountApi(context) async {
+  deleteAccountApi(context, {bool isWeb = false}) async {
     SharedPreferences myPrefs = await SharedPreferences.getInstance();
 
     var apis = AuthenticationApisServices();
@@ -590,9 +592,18 @@ class AuthenticationController with ChangeNotifier {
             .quantityOfCartProduct = 0;
 
         generalWatch.fetchingUserStaticData();
-
-        Navigator.pushNamedAndRemoveUntil(
-            context, routes.loginAndSignUpRoute, (route) => false);
+        if (isWeb == true) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (_) => StartedScreenView(),
+            ),
+            (route) => false,
+          );
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+              context, routes.loginAndSignUpRoute, (route) => false);
+        }
 
         utils.apiResponseToast(message: response['message']);
 
@@ -664,6 +675,102 @@ class AuthenticationController with ChangeNotifier {
     } else {
       utils.apiResponseToast(message: 'Failed to Logout');
       mdErrorModal = MDErrorModal.fromJson(response);
+      generalWatch.updateRestrictUserNavigation();
+      return false;
+    }
+  }
+
+  signInApiWeb(context, {bool isWeb = false}) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    fcmTokenValue = myPrefs.getString(static.fcmToken);
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    var apis = AuthenticationApisServices();
+
+    generalWatch.updateRestrictUserNavigation(value: true);
+    EasyLoading.show(status: 'Verifying your credentials');
+
+    var data = {
+      "email": "${loginEmailController.text}",
+      "password": "${loginPasswordController.text}",
+      "fcmToken": "$fcmTokenValue"
+    };
+
+    print(data.toString());
+
+    var response = await apis.login(data: data);
+    print('The login response is:' + response.toString());
+
+    if (response != null) {
+      if (response['status'] == 1) {
+        mdUserModal = MDUserModal.fromJson(response);
+
+        myPrefs.setString(
+            static.userToken, mdUserModal.data!.accessToken.toString());
+        myPrefs.setString(static.userID, mdUserModal.data!.userId.toString());
+        myPrefs.setString(static.phone, mdUserModal.data!.phone.toString());
+        myPrefs.setString(static.email, mdUserModal.data!.email.toString());
+        myPrefs.setString(
+            static.fullName, mdUserModal.data!.fullName.toString());
+        myPrefs.setString(static.address, mdUserModal.data!.address.toString());
+        myPrefs.setString(
+            static.profilePhoto, mdUserModal.data!.userImage!.toString());
+        myPrefs.setInt(static.isVerified, mdUserModal.data!.emailVerified!);
+        myPrefs.setBool(static.notificationStatusString,
+            mdUserModal.data!.sendNotification == 1 ? true : false);
+
+        await Provider.of<GeneralController>(context, listen: false)
+            .fetchingUserStaticData();
+
+        if (mdUserModal.data!.emailVerified == 0) {
+          forgetPasswordNavToVerifiedUpdator(value: false);
+
+          EasyLoading.showToast('Please Verify your account.',
+              dismissOnTap: true,
+              duration: Duration(seconds: 3),
+              toastPosition: EasyLoadingToastPosition.bottom);
+
+          ///todo: implement email verification screen.
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => WebScreenHome(),
+            ),
+          );
+        } else {
+          EasyLoading.showToast('${mdUserModal.message}',
+              dismissOnTap: true,
+              duration: Duration(seconds: 1),
+              toastPosition: EasyLoadingToastPosition.bottom);
+          navigatorkey.currentContext!
+              .read<HomeController>()
+              .screenIndexUpdate(index: 0);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => WebScreenHome(),
+            ),
+          );
+        }
+
+        generalWatch.updateRestrictUserNavigation();
+
+        notifyListeners();
+        return true;
+      } else {
+        mdErrorModal = MDErrorModal.fromJson(response);
+        EasyLoading.showToast('${mdErrorModal.message}',
+            dismissOnTap: true,
+            duration: Duration(seconds: 1),
+            toastPosition: EasyLoadingToastPosition.bottom);
+        generalWatch.updateRestrictUserNavigation();
+      }
+    } else {
+      mdErrorModal = MDErrorModal.fromJson(response);
+      EasyLoading.showToast('${mdErrorModal.message}',
+          dismissOnTap: true,
+          duration: Duration(seconds: 1),
+          toastPosition: EasyLoadingToastPosition.bottom);
       generalWatch.updateRestrictUserNavigation();
       return false;
     }

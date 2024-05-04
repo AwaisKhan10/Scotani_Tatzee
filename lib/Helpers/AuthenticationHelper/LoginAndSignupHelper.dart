@@ -190,18 +190,17 @@ class LoginAndSignUpHelper {
     DesignApparelUsers(id: '1', imgUrl: 'assets/Images/img8.png'),
   ];
   Widget images() {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: imagesList.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: 3),
-            itemBuilder: (context, index) {
-              return CustomImages(designApparelUsers: imagesList[index]);
-            }),
-      ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: imagesList.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: 3),
+          itemBuilder: (context, index) {
+            return CustomImages(designApparelUsers: imagesList[index]);
+          }),
     );
   }
 

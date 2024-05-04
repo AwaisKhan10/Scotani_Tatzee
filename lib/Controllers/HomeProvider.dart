@@ -115,6 +115,59 @@ class HomeController with ChangeNotifier {
     notifyListeners();
   }
 
+  createProduct(context, {productID, imageUrl}) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    var apis = HomeApisServices();
+
+    generalWatch.updateRestrictUserNavigation(value: true);
+
+    EasyLoading.show(status: 'Getting Product Detail');
+
+    Map<String, dynamic> data = Map();
+    data['productId'] = "${productID}";
+
+    print(data.toString());
+
+    var response = await apis.productListing(data: data);
+    print('The Product Listing  Api response is:' + response.toString());
+
+    if (response != null) {
+      if (response['status'] == 1) {
+        mdProductDetailModal = MDProductDetailModal.fromJson(response);
+
+        Navigator.pushNamed(
+          context,
+          routes.createProductWebScreenRoute,
+          arguments: {'imgUrl': imageUrl},
+        );
+
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => WebCreateProductScreen(
+        //               imgUrl: imageUrl,
+        //             )));
+
+        EasyLoading.dismiss();
+
+        generalWatch.updateRestrictUserNavigation();
+
+        notifyListeners();
+        return true;
+      } else {
+        mdErrorModal = MDErrorModal.fromJson(response);
+        generalWatch.updateRestrictUserNavigation();
+        // EasyLoading.showToast('${mdErrorModal.message}',dismissOnTap: true,duration: Duration(seconds: 1),toastPosition: EasyLoadingToastPosition.bottom);
+        return false;
+      }
+    } else {
+      mdErrorModal = MDErrorModal.fromJson(response);
+      generalWatch.updateRestrictUserNavigation();
+      //  EasyLoading.showToast('${mdErrorModal.message}',dismissOnTap: true,duration: Duration(seconds: 1),toastPosition: EasyLoadingToastPosition.bottom);
+      return false;
+    }
+  }
+
   //.................... Home Fragment ....................//
 
   TextEditingController homeSearchController = TextEditingController();

@@ -171,6 +171,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:skincanvas/AppConstant/Static.dart';
 import 'package:skincanvas/AppConstant/Theme.dart';
 import 'package:skincanvas/AppUtils/AppUtils.dart';
@@ -261,7 +262,7 @@ class _FAQExpandableListViewState extends State<FAQExpandableListView>
                       color: expandFlag
                           ? theme.orangeColor
                           : theme.midGreyColor.withOpacity(.5),
-                      size:  static.width>550? 16.sp:20.0.sp,
+                      size: static.width > 550 ? 16.sp : 20.0.sp,
                     ),
                   ),
                 ],
@@ -302,6 +303,160 @@ class _FAQExpandableListViewState extends State<FAQExpandableListView>
                       ),
                     ),
                   ))
+              : Container(),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+class FAQExpandableListViewWeb extends StatefulWidget {
+  String? title;
+  String? description;
+
+  FAQExpandableListViewWeb({this.title, this.description});
+
+  @override
+  _FAQExpandableListViewWebState createState() =>
+      _FAQExpandableListViewWebState();
+}
+
+class _FAQExpandableListViewWebState extends State<FAQExpandableListViewWeb>
+    with SingleTickerProviderStateMixin {
+  bool expandFlag = false;
+  var utils = AppUtils();
+  var theme = ThemeColors();
+  var static = Statics();
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 800),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: 4,
+      ),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        color: theme.backGroundColor,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                expandFlag = !expandFlag;
+                if (expandFlag) {
+                  _controller.forward();
+                } else {
+                  _controller.reverse();
+                }
+              });
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              decoration: BoxDecoration(
+                color: theme.backGroundColor,
+              ),
+              padding: EdgeInsets.all(
+                8,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      widget.title!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        color: theme.midGreyColor,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: theme.transparentColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: .5,
+                        color: expandFlag
+                            ? theme.orangeColor
+                            : theme.midGreyColor.withOpacity(.5),
+                      ),
+                    ),
+                    child: Icon(
+                      expandFlag
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: expandFlag ? theme.orangeColor : theme.whiteColor,
+                      size: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            //margin: EdgeInsets.only(top: 10.h),
+            width: double.infinity,
+            height: 8,
+            decoration: BoxDecoration(color: theme.lightBlackColor),
+          ),
+          expandFlag
+              ? AnimatedContainer(
+                  duration: Duration(milliseconds: 800),
+                  // Adjust the duration as needed
+                  curve: Curves.easeInOut,
+                  // Use a different easing curve for a slower effect
+                  alignment:
+                      expandFlag ? Alignment.topCenter : Alignment.bottomCenter,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.lightBlackColor,
+                    ),
+                    child: SingleChildScrollView(
+                      child: Text(
+                        widget.description!,
+                        style: GoogleFonts.poppins(
+                          fontSize: 17,
+                          color: theme.midGreyColor,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
               : Container(),
         ],
       ),

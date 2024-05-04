@@ -2,12 +2,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:skincanvas/Controllers/mobile_screen.dart';
+import 'package:skincanvas/Controllers/webScreensProvider.dart';
+import 'package:skincanvas/Views/CreateProduct/createProductScreen.dart';
+import 'package:skincanvas/web_screen/screens/layout/create_product/create_product_screen.dart';
+import 'package:skincanvas/web_screen/screens/layout/customization/customization_screen_view.dart';
+import 'package:skincanvas/web_screen/screens/web/edit_create_product_screen/edit_create_product_screen.dart';
+import 'package:skincanvas/web_screen/screens/web/home_screen/web_home_screen.dart';
+import 'package:url_strategy/url_strategy.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:skincanvas/AppConstant/Routes.dart';
 import 'package:skincanvas/AppConstant/Theme.dart';
 import 'package:skincanvas/Controllers/AuthenticationProvider.dart';
+import 'package:skincanvas/Controllers/DesignProvider.dart';
 import 'package:skincanvas/Controllers/GeneralProvider.dart';
 import 'package:skincanvas/Controllers/HomeProvider.dart';
 import 'package:skincanvas/Controllers/OrdersAndCheckOutAndWishlistProvider.dart';
@@ -19,8 +28,6 @@ import 'package:skincanvas/Views/Authentication/ResetPasswordScreen.dart';
 import 'package:skincanvas/Views/Authentication/SignupScreen.dart';
 import 'package:skincanvas/Views/Cart&Checkout/CheckoutScreen.dart';
 import 'package:skincanvas/Views/Cart&Checkout/OrderHistoryScreen.dart';
-import 'package:skincanvas/Views/CreateProduct/CreateProductScreen.dart';
-import 'package:skincanvas/Views/CreateTattoo/CreateTattooScreen.dart';
 import 'package:skincanvas/Views/Cart&Checkout/MyCartScreen.dart';
 import 'package:skincanvas/Views/EditTattooAndProduct/EditTattooAndProductScreen.dart';
 import 'package:skincanvas/Views/FragmentScreens/BottomNavigationBar.dart';
@@ -37,6 +44,10 @@ import 'package:skincanvas/Views/SettingScreens/EditProfileScreen.dart';
 import 'package:skincanvas/Views/SettingScreens/PrivacyAndPolicyScreen.dart';
 import 'package:skincanvas/Views/Splash/Splash.dart';
 import 'package:skincanvas/firebase_options.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:skincanvas/web_screen/screens/layout/started_screen.dart';
+
+import 'Controllers/WebScreenHomeProvider.dart';
 
 final GlobalKey<NavigatorState> navigatorkey = GlobalKey<NavigatorState>();
 
@@ -48,11 +59,18 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(
+      options: kIsWeb
+          ? DefaultFirebaseOptions.web
+          : DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print("Firebase initialization error: $e");
+  }
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   LocalNotificationService.initialize();
 
   // bool isTablet =
@@ -61,13 +79,17 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-
+  if (kIsWeb) {
+    setPathUrlStrategy();
+  }
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthenticationController>(
           create: (_) => AuthenticationController(),
         ),
+        ChangeNotifierProvider(create: (_) => WebScreensController()),
+        ChangeNotifierProvider(create: (_) => MobileScreenController()),
         ChangeNotifierProvider<GeneralController>(
           create: (_) => GeneralController(),
         ),
@@ -76,6 +98,12 @@ void main() async {
         ),
         ChangeNotifierProvider<OrderCheckOutWishlistController>(
           create: (_) => OrderCheckOutWishlistController(),
+        ),
+        ChangeNotifierProvider<WebScreenHomeController>(
+          create: (_) => WebScreenHomeController(),
+        ),
+        ChangeNotifierProvider<DesignMaterialProvider>(
+          create: (_) => DesignMaterialProvider(),
         ),
       ],
       child: MyApp(),
@@ -156,22 +184,34 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorkey,
         title: 'Skin Canvas',
         debugShowCheckedModeBanner: false,
-        initialRoute: routes.splashScreenRoute,
+        initialRoute: kIsWeb ? routes.webScreenRoute : routes.splashScreenRoute,
+        // initialRoute: routes.splashScreenRoute,
         builder: EasyLoading.init(),
+
         routes: {
           routes.splashScreenRoute: (context) => SplashScreen(),
+
+          routes.webScreenRoute: (context) => WebScreenHome(),
+          // routes.webScreenRoute: (context) => StartedScreenView(),
+
+          routes.customizationWebScreenRoute: (context) =>
+              CustomizaionScreenView(),
+          routes.createProductWebScreenRoute: (context) =>
+              CreateProductScreenView(),
+
           routes.onBoardingRoute: (context) => OnBoardingScreen(),
           routes.loginAndSignUpRoute: (context) => LoginAndSignUpScreen(),
           routes.loginScreenRoute: (context) => LoginScreen(),
           routes.forgetPasswordScreenRoute: (context) => ForgetPasswordScreen(),
-          routes.signUpScreenRoute: (context) =>
-              SignUpScreen(isFromLogin: false),
+          routes.signUpScreenRoute: (context) => SignUpScreen(
+                isFromLogin: false,
+              ),
           routes.resetPasswordScreenRoute: (context) => ResetPasswordScreen(),
-          routes.createTattooScreenRoute: (context) => CreateTattooScreen(),
+          // routes.createTattooScreenRoute: (context) => CreateTattooScreen(),
           routes.emailVerificationScreenRoute: (context) =>
               EmailVerificationScreen(),
           routes.bottomNavigationScreenRoute: (context) => BottomNavigation(),
-          routes.selectCategoryScreenRoute: (context) => SelectCategoryScreen(),
+          // routes.selectCategoryScreenRoute: (context) => SelectCategoryScreen(),
           routes.myCartScreenRoute: (context) => MyCartScreen(),
           routes.editTattooAndProductScreenRoute: (context) =>
               EditTattooAndProductScreen(),
@@ -190,8 +230,20 @@ class MyApp extends StatelessWidget {
           routes.myWishListScreenRoute: (context) => MyWishListScreen(),
           routes.createProductScreenRoute: (context) => CreateProductScreen(),
           routes.productDetailScreenRoute: (context) => ProductDetailScreen(),
+          routes.selectCategoryScreenRoute: (context) => SelectCategoryScreen(),
+          // routes.customizeProductScreenRoute: (context) =>
+          //     CustomizeProductScreen(),
+
+          routes.WebEditCreateAndProductWebScreenRoute: (context) =>
+              WebEditTattooAndProductScreen(),
+
+          // routes.createProduct: (context) => CreateProductScreenNew(),
+
+          // routes.createProductScreenRoute: (context) =>
+          //     CreateProductScreenNew(),
         },
         theme: ThemeData(
+          scaffoldBackgroundColor: theme.blackColor,
           primarySwatch: theme.kPrimaryColor,
         ),
       ),
