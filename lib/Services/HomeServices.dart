@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:skincanvas/AppConstant/Static.dart';
 import 'package:skincanvas/Controllers/GeneralProvider.dart';

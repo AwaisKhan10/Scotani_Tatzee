@@ -1,10 +1,6 @@
 // ignore_for_file: deprecated_member_use
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:skincanvas/AppConstant/Theme.dart';
 import 'package:skincanvas/web_screen/widgets/dialogue_box/sign_up.dart';
 

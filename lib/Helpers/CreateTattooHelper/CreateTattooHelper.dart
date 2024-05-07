@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:skincanvas/AppConstant/Routes.dart';
@@ -48,91 +49,44 @@ class CreateTattooHelper {
     });
   }
 
+  Widget heading() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 22, top: 20),
+      child: Text(
+        'Enter Your Prompt',
+        style: utils.xxlHeadingStyle(theme.whiteColor, fontFamily: 'finalBold'),
+        textAlign: TextAlign.start,
+      ),
+    );
+  }
+
   Widget designPrompt() {
-    return Column(
-      children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          margin: EdgeInsets.only(left: 20.w, top: 20),
-          child: Text(
-            'Enter Your Prompt',
-            style: utils.xxlHeadingStyle(theme.whiteColor,
-                fontFamily: 'finalBold'),
-            textAlign: TextAlign.start,
-          ),
-        ),
-
-        Positioned.fill(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.only(left: 22.w, right: 25.w),
-                child: utils.inputField(
-                    textColor: theme.blackColor,
-                    placeholderColor: theme.blackColor,
-                    placeholder:
-                        'Let artificial intelligence craft your eternal mark. Describe your vision, and let the AI tattoo generator bring it to life.',
-                    controller: homeWatch.designPromptController,
-                    isSecure: false,
-                    //    controller: authWatch.loginEmailController,
-                    maxLines: 4,
-                    textfieldColor: theme.whiteColor,
-                    borderColor: theme.whiteColor,
-                    onChange: (value) {
-                      if (value == '') {
-                        homeRead.updateIsShowGraphicsContainer(
-                            isBackButton: true);
-                      }
-                    }),
-              ),
-              // Container(
-              //   padding: EdgeInsets.only(left: 22.w, right: 25.w),
-              //   child: utils.inputField(
-              //     textColor: theme.blackColor,
-              //     placeholderColor: theme.midGreyColor.withOpacity(.7),
-              //     placeholder: 'Desire Text',
-              //     controller: homeWatch.desireTextController,
-              //     isSecure: false,
-              //     // controller: authWatch.loginEmailController,
-              //     maxLines: 1,
-              //   ),
-              // ),
-            ],
-          ),
-        ),
-        // Stack(
-        //   children: [
-        //     // Container(
-        //     //   height: 177.h,
-        //     //   width: static.width,
-        //     //   decoration: BoxDecoration(
-        //     //     color: theme.lightBlackColor,
-        //     //   ),
-        //     // ),
-        //     // Align(
-        //     //   alignment: Alignment.bottomRight,
-        //     //   child: Padding(
-        //     //     padding: EdgeInsets.only(top: 26.h),
-        //     //     child: Image.asset(
-        //     //       'assets/Images/triangle.png',
-        //     //       height: static.width * .60,
-        //     //       width: static.width * .60,
-        //     //       fit: BoxFit.contain,
-        //     //     ),
-        //     //   ),
-        //     // ),
-
-        //   ],
-        // ),
-      ],
+    return Container(
+      padding: EdgeInsets.only(left: 22.w, right: 25.w),
+      child: utils.inputField(
+          textColor: theme.blackColor,
+          placeholderColor: theme.blackColor,
+          placeholder:
+              'Let artificial intelligence craft your eternal mark. Describe your vision, and let the AI tattoo generator bring it to life.',
+          controller: homeWatch.designPromptController,
+          isSecure: false,
+          //    controller: authWatch.loginEmailController,
+          maxLines: 4,
+          textfieldColor: theme.whiteColor,
+          borderColor: theme.whiteColor,
+          onChange: (value) {
+            if (value == '') {
+              homeRead.updateIsShowGraphicsContainer(isBackButton: true);
+            }
+          }),
     );
   }
 
   Widget selectBodyArea() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: 12.w,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -546,20 +500,30 @@ class CreateTattooHelper {
                 homeWatch.isShowGraphicsContainer) {
               await homeRead.sizeGroupAPi(context,
                   isLoading: true, isFromProduct: false);
+
+              print("Working 1");
               if (homeWatch.desireTextController.text.isNotEmpty)
                 await homeRead.sizeGroupAPi(context,
                     isLoading: true, isDesireText: true);
+              print("Working 2");
 
               //.......... select Tatttoo ........//
               await homeRead.selectableTattoosAndGraphicListUpdate();
+              print("Working 3");
               //...................................//
 
               homeRead.updateImageCurrentColor(color: Colors.transparent);
+              print("Working 4");
               homeRead.updateColor(Colors.transparent);
+              print("Working 4");
               homeRead.updateSelectedFontFamilyIndex(index: 0);
+              print("Working 4");
               await homeRead.isImageOrTextUpdation(value: true);
+              print("Working 4");
               homeRead.routingForEditScreenFromTattoo(value: true);
+              print("Working 4");
               homeRead.updateIsFromTattoo(value: true);
+              print("Working 4");
               await homeRead.updateBaseColorIniatlize(Color(0xffffffff));
 
               Navigator.pushNamed(

@@ -32,7 +32,7 @@ class Statics {
   var getColors = 'get-colors';
   var xAuthToken = 'F5r3w4y!2wr';
   var bearerToken = '';
-  var openDalleToken = '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';
+  var openDalleToken = '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';
   var getProfile = 'get-profile';
 
   ///..... Apis end params.........//

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:skincanvas/Controllers/mobile_screen.dart';
 import 'package:skincanvas/Controllers/webScreensProvider.dart';
 import 'package:skincanvas/Views/CreateProduct/createProductScreen.dart';
+import 'package:skincanvas/Views/CreateTattoo/CreateTattooScreen.dart';
 import 'package:skincanvas/web_screen/screens/layout/create_product/create_product_screen.dart';
 import 'package:skincanvas/web_screen/screens/layout/customization/customization_screen_view.dart';
 import 'package:skincanvas/web_screen/screens/web/edit_create_product_screen/edit_create_product_screen.dart';
@@ -191,8 +192,8 @@ class MyApp extends StatelessWidget {
         routes: {
           routes.splashScreenRoute: (context) => SplashScreen(),
 
-          routes.webScreenRoute: (context) => WebScreenHome(),
-          // routes.webScreenRoute: (context) => StartedScreenView(),
+          // routes.webScreenRoute: (context) => WebScreenHome(),
+          routes.webScreenRoute: (context) => StartedScreenView(),
 
           routes.customizationWebScreenRoute: (context) =>
               CustomizaionScreenView(),
@@ -207,7 +208,7 @@ class MyApp extends StatelessWidget {
                 isFromLogin: false,
               ),
           routes.resetPasswordScreenRoute: (context) => ResetPasswordScreen(),
-          // routes.createTattooScreenRoute: (context) => CreateTattooScreen(),
+          routes.createTattooScreenRoute: (context) => CreateTattooScreen(),
           routes.emailVerificationScreenRoute: (context) =>
               EmailVerificationScreen(),
           routes.bottomNavigationScreenRoute: (context) => BottomNavigation(),
@@ -228,7 +229,7 @@ class MyApp extends StatelessWidget {
               PrivacyAndPolicyScreen(),
           routes.aboutUsScreenRoute: (context) => AboutUsScreen(),
           routes.myWishListScreenRoute: (context) => MyWishListScreen(),
-          routes.createProductScreenRoute: (context) => CreateProductScreen(),
+          // routes.createProductScreenRoute: (context) => CreateProductScreen(),
           routes.productDetailScreenRoute: (context) => ProductDetailScreen(),
           routes.selectCategoryScreenRoute: (context) => SelectCategoryScreen(),
           // routes.customizeProductScreenRoute: (context) =>

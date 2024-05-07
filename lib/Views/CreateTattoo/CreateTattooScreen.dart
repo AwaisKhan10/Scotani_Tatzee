@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,86 +48,76 @@ class CreateTattooScreen extends StatelessWidget {
           backgroundColor: themeColor.backGroundColor,
           resizeToAvoidBottomInset: false,
           body: InternetConnectivityScreen(
-            widget: Container(
-              width: static.width,
-              height: static.height,
-              child: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      utils.statusBar(context,
-                          color: themeColor.backGroundColor),
-                      helper.createYourTattooText(),
-                      helper.designPrompt(),
-                      SizedBox(
-                        height: 5.h,
+            widget: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    utils.statusBar(context, color: themeColor.backGroundColor),
+                    helper.createYourTattooText(),
+                    helper.heading(),
+                    helper.designPrompt(),
+                    Expanded(
+                      flex: 1,
+                      child: ListView(
+                        children: [
+                          helper.selectBodyArea(),
+                          helper.selectDesignColor(),
+                        ],
                       ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              helper.selectBodyArea(),
-                              helper.selectDesignColor(),
-                            ],
+                    ),
+                    helper.createTattooButton(),
+                    utils.bottomBar(context, color: themeColor.backGroundColor),
+                  ],
+                ),
+                homeWatch.isCreatingGraphic
+                    ? Container(
+                        height: static.height,
+                        width: static.width,
+                        color: themeColor.blackColor.withOpacity(.4),
+                      )
+                    : SizedBox(),
+                homeWatch.isCreatingGraphic
+                    ? Center(
+                        child: Container(
+                          height: static.width > 500
+                              ? static.height * .60
+                              : static.height * .74,
+                          width: static.width > 500
+                              ? static.width * .60
+                              : static.width * .74,
+                          decoration: BoxDecoration(
+                              color: themeColor.whiteColor,
+                              shape: BoxShape.circle),
+                        ),
+                      )
+                    : SizedBox(),
+                homeWatch.isCreatingGraphic
+                    ? Positioned(
+                        left: static.width > 500 ? 70.w : 60.w,
+                        top: 215.h,
+                        child: Center(
+                          child: Lottie.asset(
+                            'assets/JSON/tattooAndProductLottie.json',
+                            height: 185.h,
+                            width: 185.w,
+                            fit: BoxFit.contain,
                           ),
                         ),
-                      ),
-                      helper.createTattooButton(),
-                      utils.bottomBar(context,
-                          color: themeColor.backGroundColor),
-                    ],
-                  ),
-                  homeWatch.isCreatingGraphic
-                      ? Container(
-                          height: static.height,
-                          width: static.width,
-                          color: themeColor.blackColor.withOpacity(.4),
-                        )
-                      : SizedBox(),
-                  homeWatch.isCreatingGraphic
-                      ? Center(
-                          child: Container(
-                            height: static.width > 500
-                                ? static.height * .60
-                                : static.height * .74,
-                            width: static.width > 500
-                                ? static.width * .60
-                                : static.width * .74,
-                            decoration: BoxDecoration(
-                                color: themeColor.whiteColor,
-                                shape: BoxShape.circle),
-                          ),
-                        )
-                      : SizedBox(),
-                  homeWatch.isCreatingGraphic
-                      ? Positioned(
-                          left: static.width > 500 ? 70.w : 60.w,
-                          top: 215.h,
-                          child: Center(
-                            child: Lottie.asset(
-                              'assets/JSON/tattooAndProductLottie.json',
-                              height: 185.h,
-                              width: 185.w,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        )
-                      : SizedBox(),
-                  homeWatch.isCreatingGraphic
-                      ? Positioned(
-                          left: static.width > 500 ? 140.w : 125.w,
-                          bottom: static.width > 500 ? 215.h : 245.h,
-                          child: Text(
-                            'Magic Happening...',
-                            style:
-                                utils.labelStyleB(themeColor.midLightGreyColor),
-                          ),
-                        )
-                      : SizedBox()
-                ],
-              ),
+                      )
+                    : SizedBox(),
+                homeWatch.isCreatingGraphic
+                    ? Positioned(
+                        left: static.width > 500 ? 140.w : 125.w,
+                        bottom: static.width > 500 ? 215.h : 245.h,
+                        child: Text(
+                          'Magic Happening...',
+                          style:
+                              utils.labelStyleB(themeColor.midLightGreyColor),
+                        ),
+                      )
+                    : SizedBox()
+              ],
             ),
           ),
         ),

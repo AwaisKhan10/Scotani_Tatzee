@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +29,7 @@ import 'package:skincanvas/Services/GeneralServices.dart';
 import 'package:skincanvas/Services/HomeServices.dart';
 import 'package:skincanvas/Services/OrdersCheckoutWishlistServices.dart';
 import 'package:skincanvas/main.dart';
+import 'package:skincanvas/web_screen/web_utils/utils.dart';
 
 class HomeController with ChangeNotifier {
   var generalWatch = Provider.of<GeneralController>(
@@ -113,59 +113,6 @@ class HomeController with ChangeNotifier {
 
     count = value;
     notifyListeners();
-  }
-
-  createProduct(context, {productID, imageUrl}) async {
-    SharedPreferences myPrefs = await SharedPreferences.getInstance();
-    var apis = HomeApisServices();
-
-    generalWatch.updateRestrictUserNavigation(value: true);
-
-    EasyLoading.show(status: 'Getting Product Detail');
-
-    Map<String, dynamic> data = Map();
-    data['productId'] = "${productID}";
-
-    print(data.toString());
-
-    var response = await apis.productListing(data: data);
-    print('The Product Listing  Api response is:' + response.toString());
-
-    if (response != null) {
-      if (response['status'] == 1) {
-        mdProductDetailModal = MDProductDetailModal.fromJson(response);
-
-        Navigator.pushNamed(
-          context,
-          routes.createProductWebScreenRoute,
-          arguments: {'imgUrl': imageUrl},
-        );
-
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => WebCreateProductScreen(
-        //               imgUrl: imageUrl,
-        //             )));
-
-        EasyLoading.dismiss();
-
-        generalWatch.updateRestrictUserNavigation();
-
-        notifyListeners();
-        return true;
-      } else {
-        mdErrorModal = MDErrorModal.fromJson(response);
-        generalWatch.updateRestrictUserNavigation();
-        // EasyLoading.showToast('${mdErrorModal.message}',dismissOnTap: true,duration: Duration(seconds: 1),toastPosition: EasyLoadingToastPosition.bottom);
-        return false;
-      }
-    } else {
-      mdErrorModal = MDErrorModal.fromJson(response);
-      generalWatch.updateRestrictUserNavigation();
-      //  EasyLoading.showToast('${mdErrorModal.message}',dismissOnTap: true,duration: Duration(seconds: 1),toastPosition: EasyLoadingToastPosition.bottom);
-      return false;
-    }
   }
 
   //.................... Home Fragment ....................//
@@ -303,7 +250,7 @@ class HomeController with ChangeNotifier {
 
   screenIndexUpdate({index = 0}) {
     screenIndex = index;
-    print('The Screen Index is:' + screenIndex.toString());
+
     notifyListeners();
   }
 
@@ -472,8 +419,23 @@ class HomeController with ChangeNotifier {
     for (int i = 0; i < selectGraphics.length; i++)
       if (selectGraphics[i]) {
         // print("The images are:" + imagesListAfterBackgrohomundRemoval[i].toString());
-        selectableTattoosAndGraphicList
-            .add(imagesListAfterBackgroundRemoval[i]);
+
+        //
+        // Generated tattos from the api's
+        //
+        selectableTattoosAndGraphicList.add(listOfTattos[i]);
+
+        ///
+        /// Just for fashion
+        ///
+
+        // selectableTattoosAndGraphicList
+        //           .add(imagesListAfterBackgroundRemoval[i]);
+
+        ///
+        /// Testing Locally logo of tatto pass
+        ///
+
         // selectableTattoosAndGraphicList.add(
         //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuNc5rLuQmULUsXKZqVo1XCVrpdC7ue8vHiH0pgKqqqLiXA1XdoHnCtsuXRU9Cwvt4lPE&usqp=CAU');
       }
@@ -853,11 +815,13 @@ class HomeController with ChangeNotifier {
   ///........... Select Category...........///
 
   List<bool> categoryStatus = [];
+  List<bool> productStatus = [];
   List<bool> isFavouriteProduct = [];
 
   List<bool> selectConfigurableCategoriesStatus = [];
   int configurableCategoryIndex = 0;
   int selectedcategorystatusindex = 0;
+  int selectedproductstatusindex = 0;
 
   Products? selectedProduct;
   int selectedProductColorImageIndex = 0;
@@ -962,6 +926,17 @@ class HomeController with ChangeNotifier {
     selectedcategorystatusindex = index;
     print('Status ${categoryStatus[index]}');
     print('Fix ${categoryStatus[index]}');
+    notifyListeners();
+  }
+
+  productStatusUpdate({index}) {
+    for (int i = 0; i < productStatus.length; i++) {
+      productStatus[i] = (i == index) ? !productStatus[i] : false;
+    }
+
+    selectedproductstatusindex = index;
+    print('Status ${productStatus[index]}');
+    print('Fix ${productStatus[index]}');
     notifyListeners();
   }
 
@@ -1226,13 +1201,14 @@ class HomeController with ChangeNotifier {
     print(data.toString());
 
     var response = await apis.categoryListing(data: data);
+
     print('The Category Listing  Api response is:' + response.toString());
 
     if (response != null) {
       if (response['status'] == 1) {
         if (isLoading) {
           categoryList.clear();
-          print("categoryList ${categoryList}");
+          print("categoryList===? ${categoryList.length}");
         }
 
         print("The selected Tab index is:" + tabIndex.toString());
@@ -1243,7 +1219,20 @@ class HomeController with ChangeNotifier {
           inspirationalDataList.clear();
 
           mdCategoriesModal = MDCategoriesModal.fromJson(response);
-          inspirationalDataList.addAll(mdCategoriesModal.data!.categories!);
+          if (mdCategoriesModal.data!.categories!.isEmpty) {
+            for (var i in WebUtils().inspirationalCategories) {
+              inspirationalDataList.add(
+                Categories(
+                  image: i.imagePath,
+                  name: i.categoryName,
+                  sId: i.categoryId,
+                  subCategories: [],
+                ),
+              );
+            }
+          } else {
+            inspirationalDataList.addAll(mdCategoriesModal.data!.categories!);
+          }
 
           if (inspirationalDataList.isNotEmpty) {
             categoryList.addAll(inspirationalDataList);
@@ -1262,8 +1251,21 @@ class HomeController with ChangeNotifier {
         } else if (type == '1') {
           discoverDataList.clear();
           mdCategoriesModal = MDCategoriesModal.fromJson(response);
-          discoverDataList.addAll(mdCategoriesModal.data!.categories!);
 
+          if (mdCategoriesModal.data!.categories!.isEmpty) {
+            for (var i in WebUtils().discoverCategories) {
+              discoverDataList.add(
+                Categories(
+                  image: i.imagePath,
+                  name: i.categoryName,
+                  sId: i.categoryId,
+                  subCategories: [],
+                ),
+              );
+            }
+          } else {
+            discoverDataList.addAll(mdCategoriesModal.data!.categories!);
+          }
           print('The length of discovery Data:' +
               discoverDataList.length.toString());
 
@@ -1282,7 +1284,20 @@ class HomeController with ChangeNotifier {
         } else if (type == '2') {
           tattooDataList.clear();
           mdCategoriesModal = MDCategoriesModal.fromJson(response);
-          tattooDataList.addAll(mdCategoriesModal.data!.categories!);
+          if (mdCategoriesModal.data!.categories!.isEmpty) {
+            for (var i in WebUtils().tattoos) {
+              tattooDataList.add(
+                Categories(
+                  image: i.imagePath,
+                  name: i.categoryName,
+                  sId: i.categoryId,
+                  subCategories: [],
+                ),
+              );
+            }
+          } else {
+            tattooDataList.addAll(mdCategoriesModal.data!.categories!);
+          }
           print(
               'The length of tattoo Data:' + tattooDataList.length.toString());
 
@@ -1302,7 +1317,21 @@ class HomeController with ChangeNotifier {
           fashionDataList.clear();
 
           mdCategoriesModal = MDCategoriesModal.fromJson(response);
-          fashionDataList.addAll(mdCategoriesModal.data!.categories!);
+          if (mdCategoriesModal.data!.categories!.isEmpty) {
+            for (var i in WebUtils().shirts) {
+              fashionDataList.add(
+                Categories(
+                  image: i.imagePath,
+                  name: i.categoryName,
+                  sId: i.categoryId,
+                  subCategories: [],
+                ),
+              );
+            }
+          } else {
+            fashionDataList.addAll(mdCategoriesModal.data!.categories!);
+          }
+
           print('The length of fashion Data:' +
               fashionDataList.length.toString());
 
@@ -1326,49 +1355,124 @@ class HomeController with ChangeNotifier {
         }
         //............................... ####### ...............................//
 
-        if (type == '3') {
+        bool handleTypeThreeResponse(dynamic response) {
           configureDataList.clear();
-          mdCategoriesModal = MDCategoriesModal.fromJson(response);
-          configureDataList.addAll(mdCategoriesModal.data!.categories!);
-          print('The length of fashion Data:' +
-              configureDataList.length.toString());
-          configurableLoadingStatus(status: false);
 
-          if (configureDataList.isNotEmpty) {
-            if (configureDataList[0].subCategories!.isNotEmpty) {
-              productListingApi(context,
-                  type: type,
-                  title: '',
-                  categoryID: configureDataList[0].subCategories![0].sId,
-                  isLoading: false,
-                  isLoadingFromConfigurable: true);
+          try {
+            mdCategoriesModal = MDCategoriesModal.fromJson(response);
 
-              selectedCategoryForConfigurableUpdator(
-                index: 0,
-                ID: configureDataList[0].subCategories![0].sId,
-                type: '3',
+            if (mdCategoriesModal.status == 1) {
+              configureDataList
+                  .addAll(mdCategoriesModal.data?.categories ?? []);
+
+              print("configureDataList ==>> ? ${configureDataList.length}");
+
+              configurableLoadingStatus(status: false);
+
+              if (configureDataList.isNotEmpty) {
+                if (configureDataList[0].subCategories?.isNotEmpty ?? false) {
+                  SubCategories firstSubCategory =
+                      configureDataList[0].subCategories![0];
+
+                  productListingApi(
+                    context,
+                    type: '3',
+                    title: '',
+                    categoryID: firstSubCategory.sId,
+                  );
+
+                  selectedCategoryForConfigurableUpdator(
+                    index: 0,
+                    ID: firstSubCategory.sId,
+                    type: '3',
+                  );
+                }
+              }
+            } else {
+              // If the status is not 1, show an error toast
+              EasyLoading.showToast(
+                'Failed to fetch categories - ${mdCategoriesModal.message}',
+                dismissOnTap: true,
+                duration: Duration(seconds: 1),
+                toastPosition: EasyLoadingToastPosition.bottom,
               );
+              return false;
             }
+          } catch (e) {
+            // If there's an exception parsing the response, show an error toast
+            EasyLoading.showToast(
+              'Failed to parse API response',
+              dismissOnTap: true,
+              duration: Duration(seconds: 1),
+              toastPosition: EasyLoadingToastPosition.bottom,
+            );
+            return false;
           }
+
+          return true;
         }
 
-        notifyListeners();
-        return true;
-      } else {
-        // mdErrorModal = MDErrorModal.fromJson(response);
-        EasyLoading.showToast('Failed to fetch categories',
-            dismissOnTap: true,
-            duration: Duration(seconds: 1),
-            toastPosition: EasyLoadingToastPosition.bottom);
-        return false;
+// Usage wherever you want to handle type '3' response
+        handleTypeThreeResponse(response);
+
+// Inside your 'if (type == '3')' block
+        // if (type == '3') {
+        //   configureDataList.clear();
+
+        //   try {
+        //     mdCategoriesModal = MDCategoriesModal.fromJson(response);
+
+        //     if (mdCategoriesModal.status == 1) {
+        //       configureDataList
+        //           .addAll(mdCategoriesModal.data?.categories ?? []);
+
+        //       print("configureDataList ==>> ? ${configureDataList.length}");
+
+        //       configurableLoadingStatus(status: false);
+
+        //       if (configureDataList.isNotEmpty) {
+        //         if (configureDataList[0].subCategories?.isNotEmpty ?? false) {
+        //           SubCategories firstSubCategory =
+        //               configureDataList[0].subCategories![0];
+
+        //           productListingApi(
+        //             context,
+        //             type: type,
+        //             title: '',
+        //             categoryID: firstSubCategory.sId,
+        //             isLoading: false,
+        //             isLoadingFromConfigurable: true,
+        //           );
+
+        //           selectedCategoryForConfigurableUpdator(
+        //             index: 0,
+        //             ID: firstSubCategory.sId,
+        //             type: '3',
+        //           );
+        //         }
+        //       }
+        //     } else {
+        //       // If the status is not 1, show an error toast
+        //       EasyLoading.showToast(
+        //         'Failed to fetch categories - ${mdCategoriesModal.message}',
+        //         dismissOnTap: true,
+        //         duration: Duration(seconds: 1),
+        //         toastPosition: EasyLoadingToastPosition.bottom,
+        //       );
+        //       return false;
+        //     }
+        //   } catch (e) {
+        //     // If there's an exception parsing the response, show an error toast
+        //     EasyLoading.showToast(
+        //       'Failed to parse API response',
+        //       dismissOnTap: true,
+        //       duration: Duration(seconds: 1),
+        //       toastPosition: EasyLoadingToastPosition.bottom,
+        //     );
+        //     return false;
+        //   }
+        // }
       }
-    } else {
-      // mdErrorModal = MDErrorModal.fromJson(response);
-      EasyLoading.showToast('Failed to fetch categories',
-          dismissOnTap: true,
-          duration: Duration(seconds: 1),
-          toastPosition: EasyLoadingToastPosition.bottom);
-      return false;
     }
   }
 
@@ -1515,21 +1619,32 @@ class HomeController with ChangeNotifier {
     if (response != null) {
       if (response['status'] == 1) {
         mdProductModal = MDProductModal.fromJson(response);
+
+        ///
+        ///
+        ///
+        /// Issue
+        ///
+        ///
+        ///
         if (type == '3') {
           if (configurablePage == 1) {
             configurableProductList.clear();
-
             print('object ${configurableProductList}');
           }
           if (count == 1) {
+            print(
+                'Before adding to configurableProductList: ${configurableProductList.length}');
             configurableProductList.addAll(mdProductModal.data!.products!);
+            print(
+                'After adding to configurableProductList: ${configurableProductList.length}');
+
             await categoryStatusInitialize();
 
-            print('The length of Data:' +
-                configurableProductList.length.toString());
+            print('The length of Data: ${configurableProductList.length}');
             if (mdProductModal.data!.pagination!.pages!.toInt() >= page) {
               configurablePage = configurablePage + 1;
-              print("the configurable page is:" + configurablePage.toString());
+              print("the configurable page is: $configurablePage");
             }
           }
         } else {
@@ -1621,6 +1736,8 @@ class HomeController with ChangeNotifier {
     Map<String, dynamic> data = Map();
     data['productId'] = "${productID}";
 
+    print(data.toString());
+
     var response = await apis.productDetail(data: data);
     print('The Product Listing  Api response is:' + response.toString());
 
@@ -1629,6 +1746,59 @@ class HomeController with ChangeNotifier {
         mdProductDetailModal = MDProductDetailModal.fromJson(response);
 
         Navigator.pushNamed(context, routes.productDetailScreenRoute);
+
+        EasyLoading.dismiss();
+
+        generalWatch.updateRestrictUserNavigation();
+
+        notifyListeners();
+        return true;
+      } else {
+        mdErrorModal = MDErrorModal.fromJson(response);
+        generalWatch.updateRestrictUserNavigation();
+        // EasyLoading.showToast('${mdErrorModal.message}',dismissOnTap: true,duration: Duration(seconds: 1),toastPosition: EasyLoadingToastPosition.bottom);
+        return false;
+      }
+    } else {
+      mdErrorModal = MDErrorModal.fromJson(response);
+      generalWatch.updateRestrictUserNavigation();
+      //  EasyLoading.showToast('${mdErrorModal.message}',dismissOnTap: true,duration: Duration(seconds: 1),toastPosition: EasyLoadingToastPosition.bottom);
+      return false;
+    }
+  }
+
+  createProduct(context, {productID, imageUrl}) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    var apis = HomeApisServices();
+
+    generalWatch.updateRestrictUserNavigation(value: true);
+
+    EasyLoading.show(status: 'Getting Product Detail');
+
+    Map<String, dynamic> data = Map();
+    data['productId'] = "${productID}";
+
+    print(data.toString());
+
+    var response = await apis.productListing(data: data);
+    print('The Product Listing  Api response is:' + response.toString());
+
+    if (response != null) {
+      if (response['status'] == 1) {
+        mdProductDetailModal = MDProductDetailModal.fromJson(response);
+
+        Navigator.pushNamed(
+          context,
+          routes.createProductWebScreenRoute,
+          arguments: {'imgUrl': imageUrl},
+        );
+
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => WebCreateProductScreen(
+        //               imgUrl: imageUrl,
+        //             )));
 
         EasyLoading.dismiss();
 
@@ -2086,7 +2256,8 @@ class HomeController with ChangeNotifier {
         sizeChangeLoadingUpdate(value: true);
 
         if (isRoute) {
-          Navigator.pushNamed(context, routes.createProductScreenRoute);
+          // Navigator.pushNamed(context, routes.createProductScreenRoute);
+          Navigator.pushNamed(context, routes.customizeProductScreenRoute);
         }
         generalWatch.updateRestrictUserNavigation();
         notifyListeners();

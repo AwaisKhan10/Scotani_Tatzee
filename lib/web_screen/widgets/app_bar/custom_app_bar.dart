@@ -212,10 +212,10 @@ class CustomWidgetAppBar extends StatelessWidget {
                         color: theme.blackColor,
                         scale: 15 / ScreenUtil().scaleWidth,
                       ),
-                      suffixIcon: Image.asset(
-                        'assets/Icons/remove.png',
+                      suffixIcon: Icon(
+                        Icons.close,
+                        size: 7.sp,
                         color: theme.blackColor,
-                        scale: 15 / ScreenUtil().scaleWidth,
                       ),
                       // Adjust vertical padding
                       border: UnderlineInputBorder(

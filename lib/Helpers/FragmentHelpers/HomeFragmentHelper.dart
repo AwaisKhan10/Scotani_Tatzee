@@ -893,7 +893,7 @@ class HomeFragmentHelper {
           Tab(
             text: 'Inspiration',
           ),
-          Tab(text: 'Shirts'),
+          Tab(text: 'Tattoos'),
           Tab(text: 'Discover'),
         ],
         labelColor: Colors.red,
