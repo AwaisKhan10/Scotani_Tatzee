@@ -167,6 +167,7 @@ class EditTattooAndProductHelper {
                     }).catchError((onError) {
                       print(onError);
                     });
+                    print('Working');
 
                     if (homeWatch.finalActualImage.isNotEmpty &&
                         homeWatch.finalSampleImage.isNotEmpty) {

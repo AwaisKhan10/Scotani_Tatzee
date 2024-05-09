@@ -30,6 +30,13 @@
             {
               "client_id": "882490828937-104imsp9s4ihrfr72vid0v86b2drp3s3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "882490828937-4ktu5g788rncc2rktfroa6731v13g14b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.arhamsoft.skincanvas.skincanvas"
+              }
             }
           ]
         }
