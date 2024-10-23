@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "882490828937",
-    "firebase_url": "https://ai-digital-fashion-default-rtdb.firebaseio.com",
-    "project_id": "ai-digital-fashion",
-    "storage_bucket": "ai-digital-fashion.appspot.com"
+    "project_number": "131955136964",
+    "project_id": "scotani-94918",
+    "storage_bucket": "scotani-94918.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:882490828937:android:a73e621ab04604457abe58",
+        "mobilesdk_app_id": "1:131955136964:android:786c97c8ce4cd21a236c91",
         "android_client_info": {
-          "package_name": "com.arhamsoft.skincanvas"
+          "package_name": "com.tatzee.com"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "882490828937-104imsp9s4ihrfr72vid0v86b2drp3s3.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyANf7z7KfqV-NWGlr6P0VVe9VSrT5W3vF8"
+          "current_key": "AIzaSyDp-UVA1R66Hy5oV6GufeyaVch7Od4LGRk"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "882490828937-104imsp9s4ihrfr72vid0v86b2drp3s3.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "882490828937-4ktu5g788rncc2rktfroa6731v13g14b.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.arhamsoft.skincanvas.skincanvas"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

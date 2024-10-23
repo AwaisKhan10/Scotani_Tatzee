@@ -54,11 +54,11 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyANf7z7KfqV-NWGlr6P0VVe9VSrT5W3vF8',
-    appId: '1:882490828937:android:a73e621ab04604457abe58',
-    messagingSenderId: '882490828937',
-    projectId: 'ai-digital-fashion',
-    storageBucket: 'ai-digital-fashion.appspot.com',
+    apiKey: 'AIzaSyDp-UVA1R66Hy5oV6GufeyaVch7Od4LGRk',
+    appId: '1:131955136964:android:786c97c8ce4cd21a236c91',
+    messagingSenderId: '131955136964',
+    projectId: 'scotani-94918',
+    storageBucket: 'scotani-94918.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

@@ -37,7 +37,7 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
-    namespace "com.arhamsoft.skincanvas"
+    namespace "com.tatzee.com"
     compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
@@ -57,7 +57,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.arhamsoft.skincanvas"
+        applicationId "com.tatzee.com"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 22

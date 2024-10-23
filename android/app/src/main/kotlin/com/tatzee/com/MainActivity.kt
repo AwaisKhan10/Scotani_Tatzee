@@ -1,4 +1,4 @@
-package com.arhamsoft.skincanvas
+package com.tatzee.com
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

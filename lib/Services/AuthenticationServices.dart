@@ -8,6 +8,7 @@ import 'package:skincanvas/main.dart';
 class AuthenticationApisServices {
   Dio dio = Dio();
   var static = Statics();
+  XFile? imageFile; // Declare the imageFile variable here
 
   var generalWatch = Provider.of<GeneralController>(
       navigatorkey.currentContext!,
@@ -19,20 +20,21 @@ class AuthenticationApisServices {
     var url = static.baseURL + static.authURL + static.signup;
     print(url.toString());
 
-    // FormData formData = FormData.fromMap({
-    //   'profileImage': await MultipartFile.fromFile(
-    //     imageFile!.path,
-    //     filename: 'image.jpg', // Replace with the desired filename on the server
-    //   ),
-    //   'fullName': data['fullName'],
-    //   'email': data['email'],
-    //   'phone': data['phone'],
-    //   'password': data['password'],
-    //   'address': data['address'],
-    //   'fcmToken': data['fcmToken'],
-    // });
+    FormData formData = FormData.fromMap({
+      'profileImage': await MultipartFile.fromFile(
+        imageFile!.path,
+        filename:
+            'image.jpg', // Replace with the desired filename on the server
+      ),
+      'fullName': data['fullName'],
+      'email': data['email'],
+      'phone': data['phone'],
+      'password': data['password'],
+      'address': data['address'],
+      'fcmToken': data['fcmToken'],
+    });
 
-    //print("The form data is:"+formData.toString());
+    print("The form data is:" + formData.toString());
 
     try {
       Response response = await dio.post(url,
@@ -50,7 +52,7 @@ class AuthenticationApisServices {
       if (e.response == null) {
         print("Error Check Internet Connection");
       } else {
-        print("Error + ${e.response}");
+        print("Error SingUp + ${e.response}");
       }
       return null;
     }
@@ -77,7 +79,7 @@ class AuthenticationApisServices {
       if (e.response == null) {
         print("Error Check Internet Connection");
       } else {
-        print("Error + ${e.response}");
+        print("Error Login + ${e.response}");
       }
       return null;
     }
